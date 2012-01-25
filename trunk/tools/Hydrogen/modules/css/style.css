@@ -1,0 +1,142 @@
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	}
+body {
+	background: -moz-linear-gradient(#FFFFFF, #5393C5) repeat scroll 0 0 #5393C5;
+	overflow: hidden;
+	}
+#layout-page {
+	width: 960px;
+	height: auto;
+	margin: 2em auto;
+	background-color: white;
+	padding: 2em 3em;
+	border: 1px solid rgba(0,0,0,0.75);
+	box-shadow: 4px 4px 12px rgba(0,0,0,0.5);
+	background-color: rgba(255,255,255,0.5);
+	background-image: url(../brick_64.png);
+	background-repeat: no-repeat;
+	background-position: 40px 15px;
+	border-radius: 1.5em;
+}
+
+#layout-head {
+	height: 80px;
+	}
+#layout-head h1,
+#layout-head div {
+	margin: 0px;
+	padding: 0px;
+	margin-left: 90px;
+	}
+#layout-head h1 {
+	font-size: 2.5em;
+	}
+#layout-head div {
+	font-size: 1.1em;
+	}
+
+h2 {
+	margin: 0.1em 0em 0.1em;
+	}
+
+dl.resources>dd>ul,
+dl.resources>dd>ul, li {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	}
+dl.resources>dd>ul>li {
+	margin: 0px;
+	padding: 0px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+dl.resources>dd>ul.classes>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_php.png);
+	}
+dl.resources>dd>ul.locales>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_world.png);
+	}
+dl.resources>dd>ul.templates>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/html.png);
+	}
+dl.resources>dd>ul.scripts>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/script.png);
+	}
+dl.resources>dd>ul.styles>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/css.png);
+	}
+dl.resources>dd>ul.images>li {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/image.png);
+	}
+
+
+
+.action-index legend {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	background-repeat: no-repeat;
+	background-position: 7px 7px;
+	padding-left: 28px;
+	}
+.module-type.type-1 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_add.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-2 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_edit.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-3 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-4 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_disabled.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+
+
+.ui-widget {
+	border: 1px solid rgba(6,59,99,0.75);
+	border: 1px solid rgba(0,0,0,0.5);
+	box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+	}
+.ui-widget-content {
+	background: none;
+	background-color: rgba(255,255,255,0.5);
+	}
+.ui-widget-header {
+	background: rgba(6,59,99,0.5);
+	border: 1px solid rgba(6,59,99,0.75);
+	}
+.ui-tabs-nav li a {
+	outline: 0;
+	}
+.ui-widget-header .ui-state-default,
+.ui-widget-header .ui-state-active {
+	border-color: rgba(6,59,99,0.75);
+	background: rgba(255,255,255,0.55);
+	}	
+.ui-widget-header .ui-state-active {
+	background: rgba(255,255,255,0.89);
+	}	
+
+
+#layout-page a {
+	color: #063B63;
+	text-decoration: none;
+	}
+
+#layout-page a:hover {
+	text-decoration: underline;
+	}
+
