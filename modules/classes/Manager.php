@@ -1,0 +1,89 @@
+<?php
+class Manager extends CMF_Hydrogen_Application_Web_Site{
+	
+	public function __construct( $pathModules, $pathApp, $pathConfig = './' ){
+		$env	= new Environment( $pathModules, $pathApp, $pathConfig );
+		parent::__construct( $env );
+	}
+
+	public function main(){
+		ob_start();
+		$request	= $this->env->getRequest();
+		$action		= $request->has( 'action' ) ? $request->get( 'action' ) : 'index';
+		$arguments	= $_REQUEST;
+		unset( $arguments['action'] );
+		try{
+			$controller	= new Controller( $this->env );
+			if( !method_exists( $controller, $action ) )
+				throw new BadMethodCallException( 'Action "'.$action.'" is not existing in controller' );
+			$result	= Alg_Object_MethodFactory::call( $controller, $action, $arguments );
+
+			$view	= $controller->getView();
+			if( !method_exists( $view, $action ) )
+				throw new BadMethodCallException( 'Action "'.$action.'" is not existing in view' );
+			$content	= Alg_Object_MethodFactory::call( $view, $action );
+		}
+		catch( Exception $e ){
+			switch( $e->getCode() ){
+				case 1:
+					$content	= '<b>You must to install or link the <cite>Hydrogen Module Repository</cite> (to '.$this->env->pathApp.'modules/).</b>';
+					break;
+				default:
+					throw $e;
+			}
+		}
+		
+		$dev		= ob_get_clean();
+		$messages	= $this->env->getMessenger()->buildMessages();
+		$appName	= $this->env->getConfig()->get( 'app.name' );
+
+//		if( $this->env->getRequest()->isAjax() )								// this is an AJAX request
+	//		return $content;													// deliver content only
+
+		$config		= $this->env->getConfig();									// shortcut to configation object
+
+		$page	= $this->env->getPage();
+		$page->setTitle( 'Module Manager | Hydrogen Framework | Ceus Media' );
+		$page->js->addUrl( 'http://js.ceusmedia.de/jquery/1.4.4.min.js' );
+		$page->js->addUrl( 'http://js.ceusmedia.de/jquery/ui/1.8.4/min.js' );
+		$page->addStylesheet( 'http://js.ceusmedia.de/jquery/ui/1.8.4/css/smoothness.css' );
+		$page->addStylesheet( 'css/reset.css' );
+		$page->addStylesheet( 'css/typography.css' );
+		$page->addStylesheet( 'css/layout.messenger.css' );
+		$page->addStylesheet( 'css/form.css' );
+		$page->addStylesheet( 'css/form.button.css' );
+		$page->addStylesheet( 'css/form.fieldset.css' );
+		$page->addStylesheet( 'css/pagination.css' );
+		$page->addStylesheet( 'css/layer.css' );
+		$page->addStylesheet( 'css/table.css' );
+		$page->addStylesheet( 'css/style.css' );
+		$page->addBody( require_once 'templates/main.php' );
+		$page->setPackaging( FALSE, FALSE );
+		return $page->build( array( 'class' => 'action-'.$action ) );
+	}
+
+	/**
+	 *	Simple implementation of content response. Can be overridden for special moves.
+	 *	@access		public
+	 *	@param		string		$body		Response content body
+	 *	@return		int			Number of sent bytes
+	 */
+	protected function respond( $body, $headers = array() )
+	{
+		$response	= $this->env->getResponse();
+
+		$body		= ob_get_clean().$body;
+		if( $body )
+			$response->setBody( $body );
+
+		foreach( $headers as $key => $value )
+			if( $value instanceof Net_HTTP_Header_Field )
+				$response->addHeader( $header );
+			else
+				$response->addHeaderPair( $key, $value );
+
+		$type		= NULL;
+		return Net_HTTP_Response_Sender::sendResponse( $response, $type, TRUE );
+	}
+}
+?>
