@@ -1,0 +1,6 @@
+<Files *.inc>
+    Deny From All
+</Files>
+
+RewriteEngine Off
+
