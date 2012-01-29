@@ -1,0 +1,7 @@
+database.driver		= "sqlite";
+database.host		= ""
+database.port		= ""
+database.name		= "log.sqlite"
+database.username	= ""
+database.password	= ""
+database.prefix		= ""
