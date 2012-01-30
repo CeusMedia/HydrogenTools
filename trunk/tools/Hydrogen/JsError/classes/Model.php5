@@ -40,5 +40,13 @@ class JsError_Model{
 		$data	= $this->table->find( NULL, $conditions, $orders, $limits );
 		return $data;
 	}
+
+	public function remove( $id ){
+		$this->table->defocus();
+		$this->table->focusPrimary( $id );
+		$data	= $this->table->get( TRUE );
+		$this->table->delete();
+		return $data;
+	}
 }
 ?>
