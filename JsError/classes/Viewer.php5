@@ -34,7 +34,7 @@ class JsError_Viewer
 		$this->model	= new JsError_Model( $database, $config );
 		
 		if( isset( $_GET['remove'] ) )
-			$this->removeItem();
+			$this->model->remove( $_GET['remove'] );
 		$data	= $this->model->index();
 		$table	= $this->getTable( $data, $templateTable, $templateRow );
 
@@ -60,28 +60,6 @@ class JsError_Viewer
 		exit;
 	}
 	
-	private function removeItem()
-	{
-		$list	= array();
-		$lines	= file( $this->fileName );
-		foreach( $lines as $line )
-		{
-			if( !trim( $line ) )
-				continue;
-			$line	= trim( $line );
-			$json	= json_decode( $line, TRUE );
-			$hash	= md5( serialize( $json ) );
-			if( $hash == $_GET['remove'] )
-				continue;
-			$list[]	= $line;
-		}
-		if( count( $lines ) != count( $list ) )
-		{
-			$lines	= implode( "\n", $list );
-			file_put_contents( $fileName, $lines."\n" );
-			header( "Location: ./?updated=".time() );
-		}
-	}
 	/**
 	 *	Removes Document Root from File Name.
 	 *	@access		private
