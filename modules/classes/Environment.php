@@ -1,7 +1,7 @@
 <?php
 class Environment extends CMF_Hydrogen_Environment_Web{
 
-	public function __construct( $pathModules, $pathApp, $pathConfig = './' ){
+	public function __construct( $pathModules, $pathApp, $pathConfig = './', $fileConfig = 'config.ini' ){
 		if( !preg_match( '/^\//', $pathModules ) )
 			$pathModules	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathModules;
 		if( !preg_match( '/^\//', $pathApp ) )
@@ -9,8 +9,7 @@ class Environment extends CMF_Hydrogen_Environment_Web{
 		$this->pathApp		= $pathApp;
 		$this->pathConfig	= $pathApp.$pathConfig;
 		$this->pathModules	= $pathModules;
-
-		self::$configFile	= $this->pathConfig.'config.ini';
+		self::$configFile	= $this->pathConfig.$fileConfig;
 		
 		$this->initClock();
 		$this->initConfiguration();

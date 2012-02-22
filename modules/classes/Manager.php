@@ -1,8 +1,8 @@
 <?php
 class Manager extends CMF_Hydrogen_Application_Web_Site{
 	
-	public function __construct( $pathModules, $pathApp, $pathConfig = './' ){
-		$env	= new Environment( $pathModules, $pathApp, $pathConfig );
+	public function __construct( $pathModules, $pathApp, $pathConfig = './', $fileConfig = 'config.ini' ){
+		$env	= new Environment( $pathModules, $pathApp, $pathConfig, $fileConfig );
 		parent::__construct( $env );
 	}
 
