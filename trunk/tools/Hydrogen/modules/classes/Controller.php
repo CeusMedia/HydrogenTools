@@ -22,9 +22,50 @@ class Controller {
 		$this->restart( array( 'action' => 'details', 'moduleId' => $moduleId ) );
 	}
 
+	public function viewCode( $moduleId, $type, $fileName ){
+		$pathModule	= $this->env->pathModules.'/'.$moduleId.'/';
+		$pathFile	= '';
+		$xmpClass	= '';
+		switch( $type ){
+			case 'class':
+				$pathFile	= 'classes/';
+				$xmpClass	= 'php';
+				break;
+			case 'locale':
+				$pathFile	= 'locales/';
+				$xmpClass	= 'ini';
+				break;
+			case 'script':
+				$pathFile	= 'js/';
+				$xmpClass	= 'js';
+				break;
+			case 'style':
+				$pathFile	= 'css/';
+				$xmpClass	= 'css';
+				break;
+			case 'template':
+				$pathFile	= 'templates/';
+				$xmpClass	= 'php';
+				break;
+		}
+		if( !file_exists( $pathModule.$pathFile.$fileName ) )
+			die( 'Invalid file' );
+		$content	= File_Reader::load( $pathModule.$pathFile.$fileName );
+		$code		= UI_HTML_Tag::create( 'xmp', $content, array( 'class' => 'code '.$xmpClass ) );
+		$body		= '<h2>'.$moduleId.' - '.$fileName.'</h2>'.$code;
+		$page		= new UI_HTML_PageFrame();
+		$page->addStylesheet( 'css/reset.css' );
+		$page->addStylesheet( 'css/typography.css' );
+		$page->addStylesheet( 'css/xmp.formats.css' );
+		$page->addBody( $body );
+		print( $page->build( array( 'style' => 'margin: 1em' ) ) );
+		exit;
+	}
+	
 	public function details( $moduleId ){
 		$model	= new Model( $this->env );
 		$this->addData( 'module', $model->get( $moduleId ) );
+		$this->addData( 'moduleId', $moduleId );
 	}
 
 	public function getView(){

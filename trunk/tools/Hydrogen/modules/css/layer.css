@@ -5,9 +5,9 @@ body {
 	}
 div.layer {
 	display: none;
-	position: absolute;
-	min-width: 400px;
-	min-height: 300px;
+	position: fixed;
+	min-width: 800px;
+	min-height: 500px;
 /*	border: 5px solid #555;
 */	border-radius: 7px;
 	-moz-border-radius: 7px;
@@ -19,7 +19,7 @@ div.layer {
 	}
 
 div.layer.loading {
-	background-image: url(../../../images/spinner.gif);
+	background-image: url(../img/spinner.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	}
@@ -31,7 +31,7 @@ div#layer-back {
 	height: 100%;
 	top: 0px;
 	left: 0px;
-	background-image: url(../images/darken-75.png);
+	background-image: url(../img/darken-50.png);
 	z-index: 127;
 	}
 div.layer-image {
@@ -81,8 +81,8 @@ div.layer div.layer-head .layer-head-title {
 	}
 div.layer div.layer-content {
 	position: relative;
-	width: 600px;
-	height: 400px;
+	width: 800px;
+	height: 500px;
 	margin: 0px;
 	padding: 0px;
 /*	padding: 1em;

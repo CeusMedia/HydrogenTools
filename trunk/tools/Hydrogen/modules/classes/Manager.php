@@ -46,6 +46,8 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 		$page->setTitle( 'Module Manager | Hydrogen Framework | Ceus Media' );
 		$page->js->addUrl( 'http://js.ceusmedia.de/jquery/1.4.4.min.js' );
 		$page->js->addUrl( 'http://js.ceusmedia.de/jquery/ui/1.8.4/min.js' );
+		$page->js->addUrl( 'js/UI.Layer.js' );
+		$page->js->addScript( '$(document).ready(function(){Layer.init();});' );
 		$page->addStylesheet( 'http://js.ceusmedia.de/jquery/ui/1.8.4/css/smoothness.css' );
 		$page->addStylesheet( 'css/reset.css' );
 		$page->addStylesheet( 'css/typography.css' );
@@ -57,6 +59,7 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 		$page->addStylesheet( 'css/layer.css' );
 		$page->addStylesheet( 'css/table.css' );
 		$page->addStylesheet( 'css/style.css' );
+		$page->addStylesheet( 'css/xmp.formats.css' );
 		$page->addBody( require_once 'templates/main.php' );
 		$page->setPackaging( FALSE, FALSE );
 		return $page->build( array( 'class' => 'action-'.$action ) );

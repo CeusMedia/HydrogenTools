@@ -4,8 +4,11 @@
 $classes	= '-';
 if( $module->files->classes ){
 	$classes	= array();
-	foreach( $module->files->classes as $item )
-		$classes[]	= UI_HTML_Elements::ListItem( $item, 1 );
+	foreach( $module->files->classes as $item ){
+		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=class&fileName='.$item;
+		$link		= UI_HTML_Elements::Link( $url, $item, 'layer-html' );
+		$classes[]	= UI_HTML_Elements::ListItem( $link, 1 );
+	}
 	$classes	= UI_HTML_Elements::unorderedList( $classes, 1, array( 'class' => 'classes' ) );
 }
 
@@ -15,32 +18,44 @@ if( $module->files->classes ){
 $locales	= '-';
 if( $module->files->locales ){
 	$locales	= array();
-	foreach( $module->files->locales as $item )
-		$locales[]	= UI_HTML_Elements::ListItem( $item, 1 );
+	foreach( $module->files->locales as $item ){
+		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=locale&fileName='.$item;
+		$link		= UI_HTML_Elements::Link( $url, $item, 'layer-html' );
+		$locales[]	= UI_HTML_Elements::ListItem( $link, 1 );
+	}
 	$locales		= UI_HTML_Elements::unorderedList( $locales, 1, array( 'class' => 'locales' ) );
 }
 
 $templates	= '-';
 if( $module->files->templates ){
 	$templates	= array();
-	foreach( $module->files->templates as $item )
-		$templates[]	= UI_HTML_Elements::ListItem( $item, 1 );
+	foreach( $module->files->templates as $item ){
+		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=template&fileName='.$item;
+		$link		= UI_HTML_Elements::Link( $url, $item, 'layer-html' );
+		$templates[]	= UI_HTML_Elements::ListItem( $link, 1 );
+	}
 	$templates	= UI_HTML_Elements::unorderedList( $templates, 1, array( 'class' => 'templates' ) );
 }
 
 $styles	= '-';
 if( $module->files->styles ){
 	$styles	= array();
-	foreach( $module->files->styles as $item )
-		$styles[]	= UI_HTML_Elements::ListItem( $item, 1 );
+	foreach( $module->files->styles as $item ){
+		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=style&fileName='.$item;
+		$link		= UI_HTML_Elements::Link( $url, $item, 'layer-html' );
+		$styles[]	= UI_HTML_Elements::ListItem( $link, 1 );
+	}
 	$styles		= UI_HTML_Elements::unorderedList( $styles, 1, array( 'class' => 'styles' ) );
 }
 
 $scripts	= '-';
 if( $module->files->scripts ){
 	$scripts	= array();
-	foreach( $module->files->scripts as $item )
-		$scripts[]	= UI_HTML_Elements::ListItem( $item, 1 );
+	foreach( $module->files->scripts as $item ){
+		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=script&fileName='.$item;
+		$link		= UI_HTML_Elements::Link( $url, $item, 'layer-html' );
+		$scripts[]	= UI_HTML_Elements::ListItem( $link, 1 );
+	}
 	$scripts		= UI_HTML_Elements::unorderedList( $scripts, 1, array( 'class' => 'scripts' ) );
 }
 
