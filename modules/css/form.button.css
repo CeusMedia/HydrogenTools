@@ -22,7 +22,7 @@ button {
 	}
 .button:focus,
 .button:hover {
-	background-position: 0 -199px;
+/*	background-position: 0 -199px;*/
 	}
 .button:active {
 /*	border-color: #999999 #CCCCCC #CCCCCC #999999;
