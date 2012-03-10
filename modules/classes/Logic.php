@@ -94,7 +94,7 @@ class Logic {
 		return $state;
 	}
 
-	public function installModule( $moduleId, $installType = 0, $verbose = NULL ){
+	public function installModule( $moduleId, $installType = 0, $force = FALSE, $verbose = NULL ){
 		$config		= $this->env->getConfig();
 		$model		= new Model( $this->env );
 		$module		= $model->get( $moduleId );
@@ -131,12 +131,11 @@ class Logic {
 		foreach( array( 'filesLink', 'filesCopy' ) as $type ){
 			foreach( $$type as $fileIn => $fileOut ){
 				if( $state !== FALSE ){
+					$listDone[]	= $fileOut;
 					if( $type == 'filesLink' )														//  @todo: OS check -> no links in windows <7
-						$state	= $this->linkModuleFile( $moduleId, $fileIn, $fileOut );
+						$state	= $this->linkModuleFile( $moduleId, $fileIn, $fileOut, $force );
 					else
-						$state	= $this->copyModuleFile( $moduleId, $fileIn, $fileOut );
-					if( $state )
-						$listDone[]	= $fileOut;
+						$state	= $this->copyModuleFile( $moduleId, $fileIn, $fileOut, $force );
 				}
 			}
 		}
@@ -159,7 +158,7 @@ class Logic {
 		return $state !== FALSE;
 	}
 	
-	protected function linkModuleFile( $moduleId, $fileIn, $fileOut ){
+	protected function linkModuleFile( $moduleId, $fileIn, $fileOut, $force = FALSE ){
 		$fileIn		= $this->env->pathModules.str_replace( '_', '/', $moduleId ).'/'.$fileIn;
 		$fileOut	= $this->env->pathApp.$fileOut;
 		$pathNameIn	= realpath( $fileIn );
@@ -181,8 +180,12 @@ class Logic {
 			return FALSE;
 		}
 		if( file_exists( $fileOut ) ){
-			$this->messenger->noteFailure( $this->words['msg']['targetExisting'], $fileOut );
-			return FALSE;
+			if( $force )
+				@unlink( $fileOut );
+			else{
+				$this->messenger->noteFailure( $this->words['msg']['targetExisting'], $fileOut );
+				return FALSE;
+			}
 		}
 		if( !symlink( $pathNameIn, $fileOut ) ){
 			$this->messenger->noteFailure( $this->words['msg']['linkFailed'], $fileOut );

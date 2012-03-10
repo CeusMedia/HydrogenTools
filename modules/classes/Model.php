@@ -119,11 +119,49 @@ class Model{
 	public function install( $moduleId ){
 	}
 
+	public function isInstalled( $moduleId ){
+		$list	= array();
+		$index	= new File_RecursiveRegexFilter( $this->pathConfig, '/^\w+.xml$/' );
+		foreach( $index as $entry ){
+			$id	= preg_replace( '/\.xml$/i', '', $entry->getFilename() );
+			if( $id == $moduleId )
+				return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public function uninstall( $moduleId ){
 	}
 
+	public function getAllNeededModules( $moduleId, $list = array() ){
+		$module	= $this->get( $moduleId );
+		foreach( $module->relations->needs as $moduleName ){
+			if( array_key_exists( $moduleName, $list ) )
+				continue;
+			$list[$moduleName]	= $this->isInstalled( $moduleName );
+			foreach( $this->getAllNeededModules( $moduleName, $list ) as $id => $status )
+				if( $id !== $moduleId)
+					$list[$id]	= $status;
+		}
+		return $list;
+	}
+
+	public function getAllSupportedModules( $moduleId, $list = array() ){
+		$module	= $this->get( $moduleId );
+		foreach( $module->relations->supports as $moduleName ){
+			if( array_key_exists( $moduleName, $list ) )
+				continue;
+			$list[$moduleName]	= $this->isInstalled( $moduleName );
+			foreach( $this->getAllSupportedModules( $moduleName, $list ) as $id => $status )
+				if( $id !== $moduleId)
+					$list[$id]	= $status;
+		}
+		return $list;
+	}
+	
 	protected function readXml( $fileName ){
-		$xml	= @XML_ElementReader::readFile( $fileName );
+		$clock	= new Alg_Time_Clock();
+		$xml	= XML_ElementReader::readFile( $fileName );
 		$obj	= new stdClass();
 		$obj->title				= (string) $xml->title;
 		$obj->description		= (string) $xml->description;
@@ -138,6 +176,9 @@ class Model{
 		$obj->version			= (string) $xml->version;
 		$obj->versionAvailable	= NULL;
 		$obj->versionInstalled	= NULL;
+		$obj->relations			= new stdClass();
+		$obj->relations->needs		= array();
+		$obj->relations->supports	= array();
 		$obj->sql				= array();
 		foreach( $xml->files->class as $link )
 			$obj->files->classes[]	= (string) $link;
@@ -153,6 +194,12 @@ class Model{
 			$obj->files->images[]	= (string) $link;
 		foreach( $xml->config as $pair )
 			$obj->config[$pair->getAttribute( 'name' )]	= (string) $pair;
+		if( $xml->relations ){
+			foreach( $xml->relations->needs as $moduleName )
+				$obj->relations->needs[]	= (string) $moduleName;
+			foreach( $xml->relations->supports as $moduleName )
+				$obj->relations->supports[]	= (string) $moduleName;
+		}
 		foreach( $xml->sql as $sql ){
 			$event	= $sql->getAttribute( 'on' );
 			$type	= $sql->hasAttribute( 'type' ) ? $sql->getAttribute( 'type' ) : '*';
@@ -161,6 +208,7 @@ class Model{
 				$obj->sql[$key]	= (string) $sql;
 			}
 		}
+#		remark( $fileName.': '.$clock->stop( 3, 1 ).'ms' );
 		return $obj;
 	}
 }
