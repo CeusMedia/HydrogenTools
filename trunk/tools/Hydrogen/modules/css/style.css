@@ -62,6 +62,7 @@ dl.resources>dd>ul, li {
 	padding: 0px;
 	list-style: none;
 	}
+/*
 dl.resources>dd>ul>li {
 	margin: 0px;
 	padding: 0px;
@@ -83,12 +84,43 @@ dl.resources>dd>ul.scripts>li {
 dl.resources>dd>ul.styles>li {
 	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/css.png);
 	}
-dl.resources>dd>ul.images>li {
-	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/image.png);
+*/
+
+span.icon {
+	margin: 0px;
+	padding: 0px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+span.icon.class {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_php.png);
+	}
+span.icon.locale {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_world.png);
+	}
+span.icon.template {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/html.png);
+	}
+span.icon.script {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/script.png);
+	}
+span.icon.style {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/css.png);
 	}
 
-
-
+span.icon.module {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	}
+span.icon.module.add {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_add.png);
+	}
+span.icon.module.edit {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_edit.png);
+	}
+span.icon.module.disabled {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_disabled.png);
+	}
+	
 .action-index legend {
 	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
 	background-repeat: no-repeat;
@@ -124,7 +156,7 @@ dl.resources>dd>ul.images>li {
 	}
 .ui-widget-content {
 	background: none;
-	background-color: rgba(255,255,255,0.5);
+	background-color: rgba(255,255,255,1);
 	overflow: auto;
 	}
 .ui-widget-header {
@@ -137,10 +169,10 @@ dl.resources>dd>ul.images>li {
 .ui-widget-header .ui-state-default,
 .ui-widget-header .ui-state-active {
 	border-color: rgba(6,59,99,0.75);
-	background: rgba(255,255,255,0.55);
+	background: rgba(255,255,255,0.6);
 	}	
 .ui-widget-header .ui-state-active {
-	background: rgba(255,255,255,0.89);
+	background: rgba(255,255,255,1);
 	}	
 
 
