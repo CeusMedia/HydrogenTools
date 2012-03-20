@@ -13,6 +13,19 @@ class Controller {
 	protected function addData( $key, $value ){
 		$this->view->addData( $key, $value );
 	}
+
+	public function ajaxEditConfig( $moduleId, $key, $value ){
+		$fileName	= $this->env->pathConfig.'modules/'.$moduleId.'.xml';
+		$module		= XML_ElementReader::readFile( $fileName );
+		foreach( $module->config as $pair )
+			if( $pair->getAttribute( 'name' ) == $key )
+				$pair->{0}	= $value;
+		return File_Editor::save( $fileName, $module->asXML() );
+	}
+
+	public function ajaxAddConfig( $moduleId, $key, $value ){
+		
+	}
 	
 	public function details( $moduleId ){
 		$model		= new Model( $this->env );
@@ -26,6 +39,14 @@ class Controller {
 	public function getView(){
 		return $this->view;
 	}
+
+	public function edit( $moduleId = NULL ){
+		$model	= new Model( $this->env );
+		$this->addData( 'modules', $model->getAll() );
+/*		$this->addData( 'modulesAvailable', $model->getAvailable() );
+		$this->addData( 'modulesInstalled', $model->getInstalled() );
+		$this->addData( 'modulesNotInstalled', $model->getNotInstalled() );
+*/	}
 
 	public function index( $moduleId = NULL ){
 		$model	= new Model( $this->env );
