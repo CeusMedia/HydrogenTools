@@ -16,8 +16,12 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 			$controller	= new Controller( $this->env );
 			if( !method_exists( $controller, $action ) )
 				throw new BadMethodCallException( 'Action "'.$action.'" is not existing in controller' );
-			$result	= Alg_Object_MethodFactory::call( $controller, $action, $arguments );
 
+			$result	= Alg_Object_MethodFactory::call( $controller, $action, $arguments );
+			if( $request->isAjax() || preg_match( '/^ajax/', $action ) ){
+				print( json_encode( array( 'data' => $result ) ) );
+				exit;
+			}
 			$view	= $controller->getView();
 			if( !method_exists( $view, $action ) )
 				throw new BadMethodCallException( 'Action "'.$action.'" is not existing in view' );
@@ -29,6 +33,10 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 					$content	= '<b>You must to install or link the <cite>Hydrogen Module Repository</cite> (to '.$this->env->pathApp.'modules/).</b>';
 					break;
 				default:
+					if( $request->isAjax() ){
+						print( json_encode( array( 'exception' => $e->getMessage() ) ) );
+						exit;
+					}
 					throw $e;
 			}
 		}

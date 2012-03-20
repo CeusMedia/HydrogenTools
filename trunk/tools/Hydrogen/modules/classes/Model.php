@@ -192,8 +192,14 @@ class Model{
 			$obj->files->scripts[]	= (string) $link;
 		foreach( $xml->files->image as $link )
 			$obj->files->images[]	= (string) $link;
-		foreach( $xml->config as $pair )
-			$obj->config[$pair->getAttribute( 'name' )]	= (string) $pair;
+		foreach( $xml->config as $pair ){
+			$key	= $pair->getAttribute( 'name' );
+			$obj->config[$key]	= (object) array(
+				'key'	=> $key,
+				'type'	=> $pair->getAttribute( 'type' ),
+				'value'	=> (string) $pair,
+			);
+		}
 		if( $xml->relations ){
 			foreach( $xml->relations->needs as $moduleName )
 				$obj->relations->needs[]	= (string) $moduleName;
