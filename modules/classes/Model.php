@@ -163,6 +163,7 @@ class Model{
 		$clock	= new Alg_Time_Clock();
 		$xml	= XML_ElementReader::readFile( $fileName );
 		$obj	= new stdClass();
+		$obj->type				= "?";
 		$obj->title				= (string) $xml->title;
 		$obj->description		= (string) $xml->description;
 		$obj->files				= new stdClass();
@@ -196,7 +197,7 @@ class Model{
 			$key	= $pair->getAttribute( 'name' );
 			$obj->config[$key]	= (object) array(
 				'key'	=> $key,
-				'type'	=> $pair->getAttribute( 'type' ),
+				'type'	=> $pair->hasAttribute( 'type' ) ? $pair->getAttribute( 'type' ) : 'string',
 				'value'	=> (string) $pair,
 			);
 		}
