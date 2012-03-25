@@ -1,16 +1,22 @@
 <?php
 
-$count		= 0;
+$count			= 0;
+$pathModules	= $this->env->pathModules;
 
-$classes	= '-';
+$classes		= '-';
 if( $module->files->classes ){
 	$classes	= array();
 	foreach( $module->files->classes as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/classes/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/classes/'.$item );
+			$class	= 'missing';
+		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=class&fileName='.$item;
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon class' ) );
 		$link		= UI_HTML_Elements::Link( $url, $label, 'layer-html' );
-		$classes[]	= UI_HTML_Elements::ListItem( $link, 1 );
+		$classes[]	= UI_HTML_Elements::ListItem( $link, 1, array( 'class' => $class ) );
 	}
 	$classes	= UI_HTML_Elements::unorderedList( $classes, 1, array( 'class' => 'classes' ) );
 }
@@ -23,10 +29,15 @@ if( $module->files->locales ){
 	$locales	= array();
 	foreach( $module->files->locales as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/locales/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/locales/'.$item );
+			$class	= 'missing';
+		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=locale&fileName='.$item;
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon locale' ) );
 		$link		= UI_HTML_Elements::Link( $url, $label, 'layer-html' );
-		$locales[]	= UI_HTML_Elements::ListItem( $link, 1 );
+		$locales[]	= UI_HTML_Elements::ListItem( $link, 1, array( 'class' => $class ) );
 	}
 	$locales		= UI_HTML_Elements::unorderedList( $locales, 1, array( 'class' => 'locales' ) );
 }
@@ -36,10 +47,15 @@ if( $module->files->templates ){
 	$templates	= array();
 	foreach( $module->files->templates as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/templates/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/templates/'.$item );
+			$class	= 'missing';
+		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=template&fileName='.$item;
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon template' ) );
 		$link		= UI_HTML_Elements::Link( $url, $label, 'layer-html' );
-		$templates[]	= UI_HTML_Elements::ListItem( $link, 1 );
+		$templates[]	= UI_HTML_Elements::ListItem( $link, 1, array( 'class' => $class ) );
 	}
 	$templates	= UI_HTML_Elements::unorderedList( $templates, 1, array( 'class' => 'templates' ) );
 }
@@ -49,10 +65,15 @@ if( $module->files->styles ){
 	$styles	= array();
 	foreach( $module->files->styles as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/css/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/css/'.$item );
+			$class	= 'missing';
+		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=style&fileName='.$item;
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon style' ) );
 		$link		= UI_HTML_Elements::Link( $url, $label, 'layer-html' );
-		$styles[]	= UI_HTML_Elements::ListItem( $link, 1 );
+		$styles[]	= UI_HTML_Elements::ListItem( $link, 1, array( 'class' => $class ) );
 	}
 	$styles		= UI_HTML_Elements::unorderedList( $styles, 1, array( 'class' => 'styles' ) );
 }
@@ -62,10 +83,15 @@ if( $module->files->scripts ){
 	$scripts	= array();
 	foreach( $module->files->scripts as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/js/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/js/'.$item );
+			$class	= 'missing';
+		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=script&fileName='.$item;
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon script' ) );
 		$link		= UI_HTML_Elements::Link( $url, $label, 'layer-html' );
-		$scripts[]	= UI_HTML_Elements::ListItem( $link, 1 );
+		$scripts[]	= UI_HTML_Elements::ListItem( $link, 1, array( 'class' => $class )  );
 	}
 	$scripts		= UI_HTML_Elements::unorderedList( $scripts, 1, array( 'class' => 'scripts' ) );
 }
@@ -75,8 +101,13 @@ if( $module->files->images ){
 	$images	= array();
 	foreach( $module->files->images as $item ){
 		$count++;
+		$class	= NULL;
+		if( !file_exists( $pathModules.$moduleId.'/images/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/images/'.$item );
+			$class	= 'missing';
+		}
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon image' ) );
-		$images[]	= UI_HTML_Elements::ListItem( $label, 1 );
+		$images[]	= UI_HTML_Elements::ListItem( $label, 1, array( 'class' => $class ) );
 	}
 	$images		= UI_HTML_Elements::unorderedList( $images, 1, array( 'class' => 'images' ) );
 }
