@@ -1,0 +1,168 @@
+
+html,
+body {
+	height: 100%;
+	min-height: 500px;
+	margin: 0;
+	padding: 0;
+	}
+body.colored {
+	background: #5393C5; /* Old browsers */
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #5393C5 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#5393C5)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #FFFFFF 0%,#5393C5 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #FFFFFF 0%,#5393C5 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #FFFFFF 0%,#5393C5 100%); /* IE10+ */
+	background: linear-gradient(top, #FFFFFF 0%,#5393C5 100%); /* W3C */
+	background-attachment: fixed;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#5393C5',GradientType=0 ); /* IE6-9 */
+	}
+#layout-container {
+	padding-top: 2em;
+	}
+#layout-page {
+	width: 960px;
+	height: auto;
+	margin: 0em auto;
+	padding: 0em;
+/*	padding: 2em 3em;
+	background-color: white;
+	border: 1px solid rgba(0,0,0,0.75);
+	box-shadow: 4px 4px 12px rgba(0,0,0,0.5);
+	background-color: rgba(255,255,255,0.5);
+	background-position: 40px 15px;
+	border-radius: 1.5em;*/
+	background-image: url(../img/brick_64.png);
+	background-repeat: no-repeat;
+	background-position: 5px 0px;
+}
+
+#layout-head {
+	height: 80px;
+	}
+#layout-head h1,
+#layout-head div {
+	margin: 0px;
+	padding: 0px;
+	margin-left: 90px;
+	}
+#layout-head h1 {
+	font-size: 2.5em;
+	}
+#layout-head div {
+	font-size: 1.1em;
+	}
+
+h2 {
+	margin: 0.1em 0em 0.1em;
+	}
+
+dl.resources>dd>ul,
+dl.resources>dd>ul li {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	}
+dl.resources>dd>ul li.missing {
+	background-color: #FFDDCC;
+	}
+
+span.icon {
+	margin: 0px;
+	padding: 0px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+span.icon.class {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_php.png);
+	}
+span.icon.locale {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/page_white_world.png);
+	}
+span.icon.template {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/html.png);
+	}
+span.icon.script {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/script.png);
+	}
+span.icon.style {
+	background-image: url(http://icons.ceusmedia.de/famfamfam/silk/css.png);
+	}
+
+span.icon.module {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	}
+span.icon.module.add {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_add.png);
+	}
+span.icon.module.edit {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_edit.png);
+	}
+span.icon.module.disabled {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_disabled.png);
+	}
+	
+.action-index legend {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	background-repeat: no-repeat;
+	background-position: 7px 7px;
+	padding-left: 28px;
+	}
+.module-type.type-1 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_add.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-2 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_edit.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-3 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+.module-type.type-4 {
+	background-image: url(//icons.ceusmedia.de/famfamfam/silk/plugin_disabled.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	}
+
+
+.ui-widget {
+	border: 1px solid rgba(6,59,99,0.75);
+	border: 1px solid rgba(0,0,0,0.5);
+	box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+	}
+.ui-widget-content {
+	background: none;
+	background-color: rgba(255,255,255,1);
+	overflow: auto;
+	}
+.ui-widget-header {
+	background: rgba(6,59,99,0.5);
+	border: 1px solid rgba(6,59,99,0.75);
+	}
+.ui-tabs-nav li a {
+	outline: 0;
+	}
+.ui-widget-header .ui-state-default,
+.ui-widget-header .ui-state-active {
+	border-color: rgba(6,59,99,0.75);
+	background: rgba(255,255,255,0.6);
+	}	
+.ui-widget-header .ui-state-active {
+	background: rgba(255,255,255,1);
+	}	
+
+
+#layout-page a {
+	color: #063B63;
+	text-decoration: none;
+	}
+
+#layout-page a:hover {
+	text-decoration: underline;
+	}
+

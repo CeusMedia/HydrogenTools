@@ -71,7 +71,7 @@ class Model{
 				$module	= $this->readXml( $entry->getPathname() );
 			}
 			catch( Exception $e ){
-				$this->env->messenger->noteFailure( 'XML of Module "'.$id.'" is broken.' );
+				$this->env->messenger->noteFailure( 'XML of installed Module "'.$id.'" is broken ('.$e->getMessage().').' );
 			}
 			$module->type	= self::TYPE_CUSTOM;
 			if( is_link( 'config/modules/'.$id.'.xml' ) ){
@@ -103,7 +103,7 @@ class Model{
 				$list[$id]	= $obj;
 			}
 			catch( Exception $e ){
-				$this->env->messenger->noteFailure( 'a: XML of Module "'.$id.'" is broken.' );
+				$this->env->messenger->noteFailure( 'XML of available Module "'.$id.'" is broken ('.$e->getMessage().').' );
 			}
 		}
 		$this->cache	= $list;
