@@ -8,7 +8,7 @@ if( $module->files->classes ){
 	foreach( $module->files->classes as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/classes/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/classes/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/classes/'.$item );
 			$class	= 'missing';
 		}
@@ -29,7 +29,7 @@ if( $module->files->locales ){
 	foreach( $module->files->locales as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/locales/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/locales/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/locales/'.$item );
 			$class	= 'missing';
 		}
@@ -47,7 +47,7 @@ if( $module->files->templates ){
 	foreach( $module->files->templates as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/templates/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/templates/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/templates/'.$item );
 			$class	= 'missing';
 		}
@@ -65,7 +65,7 @@ if( $module->files->styles ){
 	foreach( $module->files->styles as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/css/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/css/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/css/'.$item );
 			$class	= 'missing';
 		}
@@ -83,7 +83,7 @@ if( $module->files->scripts ){
 	foreach( $module->files->scripts as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/js/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/js/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/js/'.$item );
 			$class	= 'missing';
 		}
@@ -101,7 +101,7 @@ if( $module->files->images ){
 	foreach( $module->files->images as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModule.'/images/'.$item ) ){
+		if( 0 && !file_exists( $pathModule.'/images/'.$item ) ){
 			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/images/'.$item );
 			$class	= 'missing';
 		}
