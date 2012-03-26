@@ -6,6 +6,11 @@ class View extends CMF_Hydrogen_View{
 		$this->env->getPage()->addJavaScript( 'http://js.ceusmedia.de/jquery/1.7.min.js' );
 	}
 
+	public function add(){
+		extract( $this->getData() );
+		return require_once 'templates/add.php';
+	}
+
 	public function edit(){
 		extract( $this->getData() );
 		return require_once 'templates/edit.php';
