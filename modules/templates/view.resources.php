@@ -1,7 +1,6 @@
 <?php
 
 $count			= 0;
-$pathModules	= $this->env->pathModules;
 
 $classes		= '-';
 if( $module->files->classes ){
@@ -9,8 +8,8 @@ if( $module->files->classes ){
 	foreach( $module->files->classes as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/classes/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/classes/'.$item );
+		if( !file_exists( $pathModule.'/classes/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/classes/'.$item );
 			$class	= 'missing';
 		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=class&fileName='.$item;
@@ -30,8 +29,8 @@ if( $module->files->locales ){
 	foreach( $module->files->locales as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/locales/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/locales/'.$item );
+		if( !file_exists( $pathModule.'/locales/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/locales/'.$item );
 			$class	= 'missing';
 		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=locale&fileName='.$item;
@@ -48,8 +47,8 @@ if( $module->files->templates ){
 	foreach( $module->files->templates as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/templates/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/templates/'.$item );
+		if( !file_exists( $pathModule.'/templates/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/templates/'.$item );
 			$class	= 'missing';
 		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=template&fileName='.$item;
@@ -66,8 +65,8 @@ if( $module->files->styles ){
 	foreach( $module->files->styles as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/css/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/css/'.$item );
+		if( !file_exists( $pathModule.'/css/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/css/'.$item );
 			$class	= 'missing';
 		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=style&fileName='.$item;
@@ -84,8 +83,8 @@ if( $module->files->scripts ){
 	foreach( $module->files->scripts as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/js/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/js/'.$item );
+		if( !file_exists( $pathModule.'/js/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/js/'.$item );
 			$class	= 'missing';
 		}
 		$url		= './?action=viewCode&moduleId='.$moduleId.'&type=script&fileName='.$item;
@@ -102,8 +101,8 @@ if( $module->files->images ){
 	foreach( $module->files->images as $item ){
 		$count++;
 		$class	= NULL;
-		if( !file_exists( $pathModules.$moduleId.'/images/'.$item ) ){
-			$this->env->messenger->noteError( 'Missing: '.$pathModules.$moduleId.'/images/'.$item );
+		if( !file_exists( $pathModule.'/images/'.$item ) ){
+			$this->env->messenger->noteError( 'Missing: '.$pathModule.'/images/'.$item );
 			$class	= 'missing';
 		}
 		$label		= UI_HTML_Tag::create( 'span', $item, array( 'class' => 'icon image' ) );

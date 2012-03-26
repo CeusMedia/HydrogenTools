@@ -5,11 +5,58 @@ class Controller {
 		$this->env			= $env;
 		$this->words		= $env->words;
 		$this->messenger	= $this->env->getMessenger();
-		$this->view		= new View( $this->env );
-		$this->addData( 'words', $env->words );
+		$this->view			= new View( $this->env );
 		$this->logic		= new Logic( $this->env );
+		$this->addData( 'words', $env->words );
 	}
 
+	public function add(){
+		$request	= $this->env->getRequest();
+		$model		= new Model( $this->env );
+		$this->addData( 'request', $request );
+		if( $request->get( 'add' ) ){
+			print_m( $request->getAll() );
+			
+			try{
+			
+				$title			= $request->get( 'add_title' );
+				$description	= $request->get( 'add_description' );
+				$version		= $request->get( 'add_version' );
+				$moduleId		= $request->get( 'add_id' );
+				$path			= $request->get( 'add_path' );
+				$route			= $request->get( 'add_route' );
+
+				
+				$this->logic->model->registerLocalFile( 'Users', 'class', 'Controller/Test.php5' );
+				
+				if( !strlen( $title ) )
+					$this->messenger->noteError( $this->words['add']['msgNoTitle'] );
+				$modules	= $this->logic->model->getAll();
+				foreach( $modules as $module )
+					if( $module->title == $title )
+						$this->messenger->noteError( $this->words['add']['msgTitleExisting'] );
+				if( in_array( $moduleId, array_keys( $modules ) ) )
+					$this->messenger->noteError( $this->words['add']['msgIdExisting'] );
+
+				if( !$this->messenger->gotError() ){
+					$this->logic->createLocalModule( $moduleId, $title, $description, $version, $route );
+					$this->messenger->noteSuccess( $this->words['add']['msgSuccessCreated'] );
+					if( $request->get( 'add_scafold' ) ){
+						$this->logic->scafoldLocalModule( $moduleId, $route );
+						$this->messenger->noteSuccess( $this->words['add']['msgSuccessScafold'] );
+					}
+		#			if( $request->get( 'add_import' ) )
+		#				$this->logic->importModuleFiles( $moduleId );
+		#				$this->messenger->noteSuccess( $this->words['add']['msgSuccessImported'] );
+				}
+				
+			}
+			catch( Exception $e ){
+				die( $e->getMessage() );
+			}
+		}
+	}
+	
 	protected function addData( $key, $value ){
 		$this->view->addData( $key, $value );
 	}
@@ -34,6 +81,7 @@ class Controller {
 		$module->supportedModules	= $model->getAllSupportedModules( $moduleId );
 		$this->addData( 'module', $module );
 		$this->addData( 'moduleId', $moduleId );
+		$this->addData( 'pathModule', $model->getPath( $moduleId ) );
 	}
 
 	public function getView(){
@@ -105,7 +153,7 @@ class Controller {
 	}
 
 	public function viewCode( $moduleId, $type, $fileName ){
-		$pathModule	= $this->env->pathModules.'/'.$moduleId.'/';
+		$pathModule	= $this->logic->getModulePath( $moduleId );
 		$pathFile	= '';
 		$xmpClass	= '';
 		switch( $type ){
@@ -131,7 +179,7 @@ class Controller {
 				break;
 		}
 		if( !file_exists( $pathModule.$pathFile.$fileName ) )
-			die( 'Invalid file' );
+			die( 'Invalid file: '.$pathModule.$pathFile.$fileName );
 		$content	= File_Reader::load( $pathModule.$pathFile.$fileName );
 		$code		= UI_HTML_Tag::create( 'xmp', $content, array( 'class' => 'code '.$xmpClass ) );
 		$body		= '<h2>'.$moduleId.' - '.$fileName.'</h2>'.$code;

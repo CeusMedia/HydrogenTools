@@ -19,6 +19,17 @@ class Model{
 				throw new RuntimeException( 'Modules configuration folder missing in "'.$this->pathConfig.'" and cannot be created', 2 );
 	}
 
+	public function createLocal( $moduleId, $title, $description = NULL, $version = NULL, $route = NULL ){
+		$data	= array(
+			'title'			=> $title,
+			'description'	=> $description,
+			'version'		=> $version,
+			'route'			=> $route
+		);
+		$xml	= UI_Template::render( 'templates/module.xml', $data );
+		return (bool) File_Writer::save( $this->pathConfig.$moduleId.'.xml', $xml );
+	}
+	
 	public function getAll(){
 		$globalModules	= $this->getAvailable();
 		$localModules	= $this->getInstalled( $globalModules );
@@ -74,7 +85,7 @@ class Model{
 				$this->env->messenger->noteFailure( 'XML of installed Module "'.$id.'" is broken ('.$e->getMessage().').' );
 			}
 			$module->type	= self::TYPE_CUSTOM;
-			if( is_link( 'config/modules/'.$id.'.xml' ) ){
+			if( is_link( $this->pathConfig.$id.'.xml' ) ){
 				$module->type	= self::TYPE_LINK;
 			}
 			$module->id		= $id;
@@ -158,6 +169,18 @@ class Model{
 		}
 		return $list;
 	}
+
+	public function registerLocalFile( $moduleId, $type, $fileName ){
+		$moduleFile	= $this->pathConfig.$moduleId.'.xml';
+		if( !file_exists( $moduleFile ) )
+			throw new InvalidArgumentException( 'Module "'.$moduleId.'" is not installed' );
+		$xml	= XML_ElementReader::readFile( $moduleFile );
+		$xml->files->addChild( $type, $fileName ); 
+		$xml	= $xml->asXml();
+		$xml	= XML_DOM_Formater::format( $xml );
+#		File_Writer::save( $moduleFile, $xml );
+	}
+	
 	
 	protected function readXml( $fileName ){
 		$clock	= new Alg_Time_Clock();

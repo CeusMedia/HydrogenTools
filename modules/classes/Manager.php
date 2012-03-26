@@ -30,7 +30,7 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 		catch( Exception $e ){
 			switch( $e->getCode() ){
 				case 1:
-					$content	= '<b>You must to install or link the <cite>Hydrogen Module Repository</cite> (to '.$this->env->pathApp.'modules/).</b>';
+					$content	= '<b>You must install or link the <cite>Hydrogen Module Repository</cite> (to '.$this->env->pathApp.'modules/).</b>';
 					break;
 				default:
 					if( $request->isAjax() ){
@@ -57,9 +57,10 @@ class Manager extends CMF_Hydrogen_Application_Web_Site{
 		$page->js->addUrl( 'js/UI.Layer.js' );
 		$page->js->addScript( '$(document).ready(function(){Layer.init();});' );
 		$page->addStylesheet( 'http://js.ceusmedia.de/jquery/ui/1.8.4/css/smoothness.css' );
-		$page->addStylesheet( 'css/reset.css' );
-		$page->addStylesheet( 'css/typography.css' );
-		$page->addStylesheet( 'css/xmp.formats.css' );
+		$page->addStylesheet( 'http://css.ceusmedia.de/blueprint/reset.css' );
+		$page->addStylesheet( 'http://css.ceusmedia.de/blueprint/typography.css' );
+		$page->addStylesheet( 'http://css.ceusmedia.de/xmp.formats.css' );
+		$page->addStylesheet( 'http://css.ceusmedia.de/layout.column.css' );
 		$page->addStylesheet( 'css/plain/layout.messenger.css' );
 		$page->addStylesheet( 'css/plain/form.css' );
 		$page->addStylesheet( 'css/plain/form.button.css' );

@@ -9,12 +9,13 @@ class Logic {
 		$this->env	= $env;
 		$this->words		= $env->words;
 		$this->messenger	= $this->env->getMessenger();
+		$this->model		= new Model( $env );
 	}
 
 	protected function copyModuleFile( $moduleId, $fileIn, $fileOut ){
 		$fileIn			= $this->env->pathModules.str_replace( '_', '/', $moduleId ).'/'.$fileIn;
 		$fileOut		= $this->env->pathApp.$fileOut;
-		$this->messenger->noteNotice( $fileIn." -> ".$fileOut );
+#		$this->messenger->noteNotice( $fileIn." -> ".$fileOut );
 		$pathNameIn		= realpath( $fileIn );
 		if( !$pathNameIn ){
 			$this->messenger->noteFailure( $this->words['msg']['resourceMissing'], $fileIn );
@@ -40,6 +41,87 @@ class Logic {
 		return TRUE;
 	}
 
+	public function importLocalModule( $moduleId, $title, $description = NULL, $version = NULL, $route = NULL ){
+		$path	= $this->getModulePath( $moduleId );
+		if( !file_exists( $path ) )
+			throw new RuntimeException( 'Path of module to import is not existing' );
+	#	- create XML file
+	#	- open XML file
+	#	- scan classes 
+	#	- append files in XML
+	#	- write XML file
+	}
+
+	public function scafoldLocalModule( $moduleId, $route ){
+
+		$language	= $this->env->getConfig()->get( 'locale.default' ).'/';
+		if( !$language )
+			$language	= 'en/';
+
+		if( !trim( $route ) )
+			throw new InvalidArgumentException( 'Route cannot by empty' );
+		$folders	= explode( "/", $route );
+		$className	= ucfirst( array_pop( $folders ) );
+
+		$path	= "";
+		if( $folders ){
+			$path	= "";
+			foreach( $folders as $folder ){
+				$path	.= ucfirst( $folder )."/";
+				@mkdir( $this->env->pathApp.'classes/Controller/'.$path );
+				@mkdir( $this->env->pathApp.'classes/View/'.$path );
+				@mkdir( $this->env->pathApp.'templates/'.strtolower( $path ) );
+				@mkdir( $this->env->pathApp.'locales/'.$language.strtolower( $path ) );
+			}
+		}
+		@mkdir( $this->env->pathApp.'templates/'.strtolower( $path ).strtolower( $className ) );
+		if( !file_exists( $this->env->pathApp.'classes/Logic' ) )
+			mkdir( $this->env->pathApp.'classes/Logic' );
+		$classPath	= $path.$className;
+		$tmplFile	= strtolower( $classPath ).'/index.php';
+		$localFile	= strtolower( $path ).strtolower( $className ).'.ini';
+		$classKey	= str_replace( '/', '_', $classPath );
+		$data	= array(
+			'moduleId'	=> $moduleId,
+			'className'	=> $className,
+			'classPath'	=> $classPath,
+			'classKey'	=> $classKey,
+			'tmplFile'	=> $tmplFile,
+		);
+		print_m( $data );
+		
+		$fileLogic		= $this->env->pathApp.'classes/Logic/'.$className.'.php5';
+		$fileModel		= $this->env->pathApp.'classes/Model/'.$className.'.php5';
+		$fileController	= $this->env->pathApp.'classes/Controller/'.$classPath.'.php5';
+		$fileView		= $this->env->pathApp.'classes/View/'.$classPath.'.php5';
+		$fileTemplate	= $this->env->pathApp.'templates/'.$tmplFile;
+		$fileLocale		= $this->env->pathApp.'locales/'.$language.strtolower( $classPath).'.ini';
+		$codeLogic		= UI_Template::render( 'templates/scafold/logic.tmpl', $data );
+		$codeModel		= UI_Template::render( 'templates/scafold/model.tmpl', $data );
+		$codeController	= UI_Template::render( 'templates/scafold/controller.tmpl', $data );
+		$codeView		= UI_Template::render( 'templates/scafold/view.tmpl', $data );
+		$codeTemplate	= UI_Template::render( 'templates/scafold/template.tmpl', $data );
+		$codeLocal		= UI_Template::render( 'templates/scafold/locale.tmpl', $data );
+	
+		$this->model->registerLocalFile( $moduleId, 'class', 'Logic/'.$className.'.php5' );
+		$this->model->registerLocalFile( $moduleId, 'class', 'Model/'.$className.'.php5' );
+		$this->model->registerLocalFile( $moduleId, 'class', 'Controller/'.$classPath.'.php5' );
+		$this->model->registerLocalFile( $moduleId, 'class', 'View/'.$classPath.'.php5' );
+		$this->model->registerLocalFile( $moduleId, 'template', $tmplFile );
+		$this->model->registerLocalFile( $moduleId, 'locale', $language.strtolower( $classPath).'.ini' );
+		
+		File_Writer::save( $fileLogic, $codeLogic );		
+		File_Writer::save( $fileModel, $codeModel );		
+		File_Writer::save( $fileController, $codeController );		
+		File_Writer::save( $fileView, $codeView );		
+		File_Writer::save( $fileTemplate, $codeTemplate );		
+		File_Writer::save( $fileLocale, $codeLocal );		
+	}
+	
+	public function createLocalModule( $moduleId, $title, $description = NULL, $version = NULL, $route = NULL ){
+		$this->model->createLocal( $moduleId, $title, $description, $version, $route );
+	}
+	
 	/**
 	 *	Creates a Path by creating all Path Steps.
 	 *	@access		protected
@@ -94,11 +176,14 @@ class Logic {
 		return $state;
 	}
 
+	public function getModulePath( $moduleId ){
+		return $this->model->getPath( $moduleId );
+	}
+	
 	public function installModule( $moduleId, $installType = 0, $force = FALSE, $verbose = NULL ){
 		$config		= $this->env->getConfig();
-		$model		= new Model( $this->env );
-		$module		= $model->get( $moduleId );
-		$pathModule	= $model->getPath( $moduleId );
+		$module		= $this->model->get( $moduleId );
+		$pathModule	= $this->model->getPath( $moduleId );
 		$pathTheme	= $config->get( 'path.themes' ).$config->get( 'layout.theme' ).'/';
 		$filesLink	= array();
 		$filesCopy	= array();
@@ -197,8 +282,7 @@ class Logic {
 	public function uninstallModule( $moduleId, $verbose = TRUE ){
 		$config		= $this->env->getConfig();
 		$pathTheme	= $this->env->pathApp.$config->get( 'path.themes' ).$config->get( 'layout.theme' ).'/';
-		$model		= new Model( $this->env );
-		$module		= $model->get( $moduleId );
+		$module		= $this->model->get( $moduleId );
 
 		$files	= array();
 #		try{
