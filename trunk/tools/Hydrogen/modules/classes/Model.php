@@ -176,12 +176,9 @@ class Model{
 			throw new InvalidArgumentException( 'Module "'.$moduleId.'" is not installed' );
 		$xml	= XML_ElementReader::readFile( $moduleFile );
 		$xml->files->addChild( $type, $fileName ); 
-		$xml	= $xml->asXml();
-		$xml	= XML_DOM_Formater::format( $xml );
-#		File_Writer::save( $moduleFile, $xml );
+		File_Writer::save( $moduleFile, XML_DOM_Formater::format( $xml->asXml() ) );
 	}
-	
-	
+
 	protected function readXml( $fileName ){
 		$clock	= new Alg_Time_Clock();
 		$xml	= XML_ElementReader::readFile( $fileName );

@@ -48,6 +48,7 @@ class Controller {
 		#			if( $request->get( 'add_import' ) )
 		#				$this->logic->importModuleFiles( $moduleId );
 		#				$this->messenger->noteSuccess( $this->words['add']['msgSuccessImported'] );
+					$this->restart( array( 'action' => 'details', 'moduleId' => $moduleId ) );
 				}
 				
 			}
@@ -145,8 +146,12 @@ class Controller {
 	}
 
 	public function uninstall( $moduleId, $verbose = TRUE ){
-		if( $this->logic->uninstallModule( $moduleId, $verbose ) )
+		$module	= $this->logic->model->get( $moduleId );
+		if( $this->logic->uninstallModule( $moduleId, $verbose ) ){
 			$this->messenger->noteSuccess( $this->words['msg']['moduleUninstalled'], $moduleId );
+			if( $module->type == Model::TYPE_CUSTOM )
+				$this->restart();
+		}
 		else
 			$this->messenger->noteError( $this->words['msg']['moduleNotUninstalled'], $moduleId );
 		$this->restart( array( 'action' => 'details', 'moduleId' => $moduleId ) );
