@@ -29,7 +29,7 @@ Layer = {
 		window.onerror = function(e){
 			alert(e);
 		}
-		var back = $('<div></div>').attr('id','layer-back').click(Layer.hide);
+		var back = $('<div></div>').prop('id','layer-back').click(Layer.hide);
 		$("body").prepend(back);
 
 		$(document).keydown(function(event){
@@ -63,8 +63,8 @@ Layer = {
 		if(!Layer.current)
 			this.create();
 		Layer.current.html(null);
-		if(elem.attr('title')){
-			var title = $('<div></div>').addClass('layer-head-title').html(elem.attr('title'));
+		if(elem.prop('title')){
+			var title = $('<div></div>').addClass('layer-head-title').html(elem.prop('title'));
 		}
 		var close = $('<button></button>').addClass('layer-head-close').append('X').click(Layer.hide);
 		var head = $('<div></div>').addClass('layer-head').append(close).append(title);
@@ -75,13 +75,13 @@ Layer = {
 			content.height(height);
 		var iframe = '';
 		if($.browser.msie)
-			iframe = $('<iframe></iframe>').attr({
-				'src': elem.attr('href'),
+			iframe = $('<iframe></iframe>').prop({
+				'src': elem.prop('href'),
 				'frameborder': 0
 			});
 		else
-			iframe = $('<object></object>').attr({
-				'data': elem.attr('href'),
+			iframe = $('<object></object>').prop({
+				'data': elem.prop('href'),
 				'type': 'text/html',
 				'border': 0
 			});
@@ -91,10 +91,10 @@ Layer = {
 	showImage: function(elem){
 		var imageIndex	= 0
 		var imageGroup	= []
-		if(elem.attr('rel')){
-			$("a[rel='"+elem.attr('rel')+"']").each(function(i){
+		if(elem.prop('rel')){
+			$("a[rel='"+elem.prop('rel')+"']").each(function(i){
 				imageGroup.push($(this));
-				if($(this).attr('href') == elem.attr('href'))
+				if($(this).prop('href') == elem.prop('href'))
 					imageIndex = parseInt(i);
 			});
 		}
@@ -120,7 +120,7 @@ Layer = {
 		};
 
 		Layer.current.html('').append($('<div></div>').addClass('layer-image').html(image));
-		image.src = elem.attr('href')+ ( $.browser.msie ? "#"+new Date().getMilliseconds() : '' );
+		image.src = elem.prop('href')+ ( $.browser.msie ? "#"+new Date().getMilliseconds() : '' );
 
 		var buttonPrev = $('<button class="button no-to-prev"><span>&laquo;</span></button>').click(function(){
 			Layer.showImage($(imageGroup[imageIndex-1]));
@@ -129,11 +129,11 @@ Layer = {
 			Layer.showImage($(imageGroup[imageIndex+1]));
 		});
 		if(imageIndex == 0)
-			buttonPrev.attr('disabled','disabled');
+			buttonPrev.prop('disabled','disabled');
 		if(imageIndex == imageGroup.length - 1)
-			buttonNext.attr('disabled','disabled');
+			buttonNext.prop('disabled','disabled');
 		var infoNavi = $('<div></div>').addClass('layer-info-navi buttons').append(buttonPrev).append(buttonNext).append(buttonDownload);
-		var infoTitle = $('<div></div>').addClass('layer-info-title').html(elem.attr('title'));
+		var infoTitle = $('<div></div>').addClass('layer-info-title').html(elem.prop('title'));
 		var info = $('<div></div>').addClass('layer-info').append(infoNavi).append(infoTitle);
 		Layer.current.append(info);
 		Layer.show();

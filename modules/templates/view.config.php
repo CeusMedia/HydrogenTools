@@ -22,7 +22,7 @@ $(document).ready(function(){
 			var dd = $(this);
 			if(!dd.data("state")){
 				dd.data("key",dd.prev().html());
-				dd.data("type",dd.attr("rel"));
+				dd.data("type",dd.prop("rel"));
 				dd.data("value",dd.html());
 				dd.data("state",1);
 			}
@@ -32,12 +32,12 @@ $(document).ready(function(){
 					dd.html(dd.data("value"));
 				});
 				if(dd.data("type") == "string")
-					var input = $("<input/>").val(dd.data("value")).attr("type","text");
+					var input = $("<input/>").val(dd.data("value")).prop("type","text");
 				else if(type == "boolean"){
-					var input = $("<input/>").attr("type","checkbox");
+					var input = $("<input/>").prop("type","checkbox");
 					var checked = value == "yes" || value == "1";
-					input.attr("checked",checked ? "checked" : "");
-					input.val(1).attr("name",key).data("value",value);
+					input.prop("checked",checked ? "checked" : "");
+					input.val(1).prop("name",key).data("value",value);
 				}
 				$(this).html(input);
 				dd.data("state",2);
