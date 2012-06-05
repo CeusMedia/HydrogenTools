@@ -19,7 +19,7 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 		$modelSource	= new Model_ModuleSource( $this->env );
 		$modelInstance	= new Model_Instance( $this->env );
 		$logic			= new Logic_Module( $this->env );
-		remark( "Sources:" );
+/*		remark( "Sources:" );
 		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
 		remark( "Instances:" );
 		print_m( array_keys( $modelInstance->getAll( FALSE ) ) );
@@ -27,6 +27,9 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 		print_m( $logic->getCategories() );
 		remark( "Modules installed:" );
 		print_m( array_keys( $logic->model->getInstalled() ) );
+		
+#		$logic->uninstallModule( $moduleId );
+*/
 
 		$modules	= array(
 			'Admin_Instances',
@@ -36,10 +39,6 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 			'Admin_Module_Editor',
 			'Admin_Module_Creator',
 		);
-		
-#		$logic->uninstallModule( $moduleId );
-
-		$installed	= FALSE;
 		foreach( $modules as $moduleId ){
 			if( !$this->env->getModules()->has( $moduleId ) ){
 				$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );

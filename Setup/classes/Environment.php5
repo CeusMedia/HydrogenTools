@@ -9,8 +9,12 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		self::$classRouter	= 'CMF_Hydrogen_Environment_Router_Recursive';
 		self::$configFile	= "config/config.ini";
 		
-		if( !file_exists( self::$configFile ) )
+		if( !file_exists( self::$configFile ) ){
 			copy( self::$configFile.'.dist', self::$configFile );
+			$baseUrl	= 'http://'.getEnv( 'HTTP_HOST' ).dirname( getEnv( 'SCRIPT_NAME' ) ).'/';
+			$editor	= new File_INI_Editor( self::$configFile );
+			$editor->setProperty( 'app.base.url', $baseUrl );
+		}
 
 		$pathModules	= CMF_PATH.'modules/Hydrogen/';
 		if( !preg_match( '/^\//', $pathModules ) )
