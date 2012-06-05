@@ -25,8 +25,11 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 		print_m( array_keys( $modelInstance->getAll( FALSE ) ) );
 		remark( "Categories:" );
 		print_m( $logic->getCategories() );
+		remark( "Modules installed:" );
+		print_m( array_keys( $logic->model->getInstalled() ) );
 
-		$logic->installModule( 'Admin_Instances', Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
+		if( !$this->env->getModules()->has( 'Admin_Instances' ) )
+			$logic->installModule( 'Admin_Instances', Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
 		die;
 	}
 
