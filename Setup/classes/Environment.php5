@@ -8,13 +8,17 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 
 		self::$classRouter	= 'CMF_Hydrogen_Environment_Router_Recursive';
 		self::$configFile	= "config/config.ini";
-		
-		if( !file_exists( self::$configFile ) ){
-			copy( self::$configFile.'.dist', self::$configFile );
-			$baseUrl	= 'http://'.getEnv( 'HTTP_HOST' ).dirname( getEnv( 'SCRIPT_NAME' ) ).'/';
-			$editor	= new File_INI_Editor( self::$configFile );
-			$editor->setProperty( 'app.base.url', $baseUrl );
-		}
+
+		$this->host	= getEnv( 'HTTP_HOST' );
+		$this->root	= getEnv( 'DOCUMENT_ROOT' );
+		$this->path	= dirname( getEnv( 'SCRIPT_NAME' ) ).'/';
+		$this->uri	= $this->root.$this->path;
+		$this->url	= 'http://'.$this->host.$this->path;
+
+		$this->checkConfig();
+		$this->checkInstances();
+		$this->checkSources();
+		$this->checkThemes();
 
 		$pathModules	= CMF_PATH.'modules/Hydrogen/';
 		if( !preg_match( '/^\//', $pathModules ) )
@@ -49,6 +53,84 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initPage();																			//  
 		$this->initAcl();																			//  
 		$this->initRemote( $forceInstanceId );														//  
+
+		$this->checkModules();
+	}
+
+	protected function checkConfig(){
+		if( !file_exists( self::$configFile ) ){
+			copy( self::$configFile.'.dist', self::$configFile );
+			$editor	= new File_INI_Editor( self::$configFile );
+			$editor->setProperty( 'app.base.url', $this->url );
+		}
+	}
+
+	protected function checkInstances(){
+		$fileName	= 'config/instances.ini';
+		if( !file_exists( $fileName ) ){
+			File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
+			$editor	= new File_INI_Editor( $fileName, TRUE );
+			$editor->setProperty( 'path', $this->uri, 'Setup' );
+			$this->restart();
+		}
+	}
+
+	protected function checkModules(){
+		CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
+		$modelSource	= new Model_ModuleSource( $this );
+		$modelInstance	= new Model_Instance( $this );
+		$logic			= new Logic_Module( $this );
+/*		remark( "Sources:" );
+		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
+		remark( "Instances:" );
+		print_m( array_keys( $modelInstance->getAll( FALSE ) ) );
+		remark( "Categories:" );
+		print_m( $logic->getCategories() );
+		remark( "Modules installed:" );
+		print_m( array_keys( $logic->model->getInstalled() ) );
+		
+#		$logic->uninstallModule( $moduleId );
+*/
+		$modules	= array(
+			'Admin_Instances',
+			'Admin_Modules',
+			'Admin_Module_Sources',
+			'Admin_Module_Installer',
+			'Admin_Module_Editor',
+			'Admin_Module_Creator',
+		);
+		foreach( $modules as $moduleId ){
+			if( !$this->getModules()->has( $moduleId ) ){
+				$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
+				$this->restart();
+			}
+		}
+	}
+
+	protected function checkSources(){
+		$fileName	= 'config/modules/sources.ini';
+		if( !file_exists( $fileName ) ){
+			copy( $fileName.'.dist', $fileName );
+			$editor	= new File_INI_Editor( $fileName, TRUE );
+			$editor->setProperty( 'path', CMF_PATH.'modules/Hydrogen/', 'Local_CM_Public' );
+			$this->restart();
+		}
+	}
+	
+	protected function checkThemes(){
+		if( !file_exists( 'themes/petrol' ) ){
+			$source	= CMF_PATH.'themes/Hydrogen/petrol';
+			$target	= $this->uri.'themes/petrol';
+			if( !file_exists( 'themes' ) )
+				if( !mkdir( 'themes', 0770 ) )
+					throw new RuntimeException( 'Could not create themes folder' );
+			if( !file_exists( 'themes/petrol' ) ){
+				if( !file_exists( $source ) )
+					throw new RuntimeException( 'Could not find Hydrogen theme "petrol" in '.$source );
+				if( !symlink( $source, $target ) )
+					throw new RuntimeException( 'Could not create link to petrol theme' );
+			}
+		}
 	}
 
 	public function getRemote(){
@@ -110,6 +192,11 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$this->pathApp		= $pathApp;
 			$this->pathConfig	= $pathApp.$pathConfig;
 		}
+	}
+
+	protected function restart(){
+		header( 'Location: ./' );
+		exit;
 	}
 }
 ?>
