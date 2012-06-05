@@ -3,7 +3,7 @@
 //		return $content;													// deliver content only
 
 $links		= $words['links'];
-$sublinks	= array( 'manage/module' => $words['links_manage_module'] );
+$sublinks	= array( 'admin/module' => $words['links_admin_module'] );
 
 $controller	= $env->request->get( 'controller' );
 $action		= $env->request->get( 'action' );
