@@ -1,0 +1,18 @@
+app.base.url		= "http://localhost/sandbox/Hydrogen/tools/Setup/"
+
+path.module.config	= "config/modules/"
+path.module.lib		= "modules/"
+path.templates		= "templates/"
+path.log			= "logs/"
+path.themes			= "themes/"
+path.locales		= "locales/"
+path.scripts		= "javascripts/"
+path.scripts.lib	= "http://js.int1a.net/"
+path.styles.lib		= "http://css.int1a.net/"
+
+layout.primer		= "petrol"
+layout.theme		= "custom"
+
+locale.allowed		= "de,en"
+locale.default		= "de"
+
