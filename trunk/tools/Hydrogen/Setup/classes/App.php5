@@ -28,11 +28,31 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 		remark( "Modules installed:" );
 		print_m( array_keys( $logic->model->getInstalled() ) );
 
-		if( !$this->env->getModules()->has( 'Admin_Instances' ) )
-			$logic->installModule( 'Admin_Instances', Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
-		die;
+		$modules	= array(
+			'Admin_Instances',
+			'Admin_Modules',
+			'Admin_Module_Sources',
+			'Admin_Module_Installer',
+			'Admin_Module_Editor',
+			'Admin_Module_Creator',
+		);
+		
+#		$logic->uninstallModule( $moduleId );
+
+		$installed	= FALSE;
+		foreach( $modules as $moduleId ){
+			if( !$this->env->getModules()->has( $moduleId ) ){
+				$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
+				$this->restart();
+			}
+		}
 	}
 
+	protected function restart(){
+		header( 'Location: ./' );
+		exit;
+	}
+	
 	protected function checkThemes(){
 		if( !file_exists( 'themes/custom' ) ){
 			$source	= CMF_PATH.'themes/Hydrogen/petrol';
@@ -56,8 +76,7 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 			copy( $fileName.'.dist', $fileName );
 			$editor	= new File_INI_Editor( $fileName, TRUE );
 			$editor->setProperty( 'path', $this->uri, 'Setup' );
-			header( 'Location: ./' );
-			exit;
+			$this->restart();
 		}
 	}
 
@@ -67,12 +86,11 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 			copy( $fileName.'.dist', $fileName );
 			$editor	= new File_INI_Editor( $fileName, TRUE );
 			$editor->setProperty( 'path', CMF_PATH.'modules/Hydrogen/', 'Local_CM_Public' );
-			header( 'Location: ./' );
-			exit;
+			$this->restart();
 		}
 	}
 
-	public function run(){
+/*	public function run(){
 		if( !$this->env->getModules()->has( 'Admin_Module_Sources' ) ){
 			remark( 'Root: '.$this->root );
 			remark( 'Path: '.$this->path );
@@ -81,12 +99,12 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 			remark( 'URL: '.$this->url );
 			die( 'Module "Admin_Module_Sources" is missing' );
 		}
-		if( !$this->env->getModules()->has( 'Instances' ) ){
+		if( !$this->env->getModules()->has( 'Admin_Instances' ) ){
 			die( 'Module "Admin_Instances" is missing' );
 		}
 		
 		remark( getCwd() );
 		remark( realpath( __FILE__ ) );
-	}
+	}*/
 }
 ?>
