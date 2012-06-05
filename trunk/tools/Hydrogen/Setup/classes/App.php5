@@ -30,7 +30,6 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 		
 #		$logic->uninstallModule( $moduleId );
 */
-
 		$modules	= array(
 			'Admin_Instances',
 			'Admin_Modules',
@@ -53,7 +52,7 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 	}
 	
 	protected function checkThemes(){
-		if( !file_exists( 'themes/custom' ) ){
+		if( !file_exists( 'themes/petrol' ) ){
 			$source	= CMF_PATH.'themes/Hydrogen/petrol';
 			$target	= $this->uri.'themes/petrol';
 			if( !file_exists( 'themes' ) )
@@ -65,7 +64,6 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 				if( !symlink( $source, $target ) )
 					throw new RuntimeException( 'Could not create link to petrol theme' );
 			}
-			Folder_Editor::createFolder( 'themes/custom/', 0770 );
 		}
 	}
 
@@ -88,22 +86,5 @@ class Tool_Hydrogen_Setup_App extends CMF_Hydrogen_Application_Web_Site{
 			$this->restart();
 		}
 	}
-
-/*	public function run(){
-		if( !$this->env->getModules()->has( 'Admin_Module_Sources' ) ){
-			remark( 'Root: '.$this->root );
-			remark( 'Path: '.$this->path );
-			remark( 'HOST: '.$this->host );
-			remark( 'URI: '.$this->uri );
-			remark( 'URL: '.$this->url );
-			die( 'Module "Admin_Module_Sources" is missing' );
-		}
-		if( !$this->env->getModules()->has( 'Admin_Instances' ) ){
-			die( 'Module "Admin_Instances" is missing' );
-		}
-		
-		remark( getCwd() );
-		remark( realpath( __FILE__ ) );
-	}*/
 }
 ?>
