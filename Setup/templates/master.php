@@ -35,7 +35,7 @@ $infos	= array(
 );
 if( !$config->get( 'app.production' ) ){
 	$infos[]	= sprintf( $words['footer_info']['time_stopped'], $env->getClock()->stop( 0, 2 ) );
-	if( $env->getDatabase()->numberStatements )
+	if( $env->has( 'dbc' ) && $env->getDatabase()->numberStatements )
 		$infos[]	= sprintf( $words['footer_info']['requests'], $env->getDatabase()->numberStatements );
 }
 
