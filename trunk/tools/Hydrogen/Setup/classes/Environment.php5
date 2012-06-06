@@ -15,15 +15,15 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->uri	= $this->root.$this->path;
 		$this->url	= 'http://'.$this->host.$this->path;
 
-		$this->checkConfig();
-		$this->checkInstances();
-		$this->checkSources();
-		$this->checkThemes();
+		$this->checkConfig();																		//  create main configuation if missing
+		$this->checkInstances();																	//  create setup tool as first instance of none are defined yet
+		$this->checkSources();																		//  create local cmFrameworks copy as first module source of none are defined yet
+		$this->checkThemes();																		//  link in petrol theme is missing
 
-		$pathModules	= CMF_PATH.'modules/Hydrogen/';
-		if( !preg_match( '/^\//', $pathModules ) )
-			$pathModules	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathModules;
-		$this->pathModules	= $pathModules;
+		$pathModules	= CMF_PATH.'modules/Hydrogen/';												//  
+		if( !preg_match( '/^\//', $pathModules ) )													//  module path is not absolute @todo kriss: remove
+			$pathModules	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathModules;							//  prepend document root to module path @todo kriss: remove
+		$this->pathModules	= $pathModules;															//  store module path @todo kriss: remove
 
 		$this->path			= dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/';
 		if( isset( $options['pathApp'] ) )
@@ -33,13 +33,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initConfiguration();																	//  setup configuration
 		$this->initModules();																		//  setup module support
 
-		if( !$this->getModules()->has( 'Admin_Module_Sources' ) )
-			require_once $pathModules.'Admin/Module/Sources/classes/Model/ModuleSource.php5';
-		if( !$this->getModules()->has( 'Admin_Instances' ) )
-			require_once $pathModules.'Admin/Instances/classes/Model/Instance.php5';
-		if( !$this->getModules()->has( 'Admin_Modules' ) ){
-			require_once $pathModules.'Admin/Modules/classes/Model/Module.php5';
-			require_once $pathModules.'Admin/Modules/classes/Logic/Module.php5';
+		if( !$this->getModules()->has( 'Admin_Module_Sources' ) )									//  source administration module not installed yet
+			require_once $pathModules.'Admin/Module/Sources/classes/Model/ModuleSource.php5';		//  load atleast module source model class
+		if( !$this->getModules()->has( 'Admin_Instances' ) )										//  instance administration module not installed yet
+			require_once $pathModules.'Admin/Instances/classes/Model/Instance.php5';				//  load atleast instance model class
+		if( !$this->getModules()->has( 'Admin_Modules' ) ){											//  module administration module not installed yet
+			require_once $pathModules.'Admin/Modules/classes/Model/Module.php5';					//  load atleast module model class
+			require_once $pathModules.'Admin/Modules/classes/Logic/Module.php5';					//  and module logic class for installating missing modules
 		}
 		
 		$this->initSession();																		//  setup session support
@@ -54,7 +54,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initAcl();																			//  
 		$this->initRemote( $forceInstanceId );														//  
 
-		$this->checkModules();
+		$this->checkModules();																		//  try to install missing modules
 	}
 
 	protected function checkConfig(){
@@ -91,19 +91,29 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		
 #		$logic->uninstallModule( $moduleId );
 */
-		$modules	= array(
-			'Admin_Instances',
-			'Admin_Modules',
-			'Admin_Module_Sources',
-			'Admin_Module_Installer',
-			'Admin_Module_Editor',
-			'Admin_Module_Creator',
-		);
-		foreach( $modules as $moduleId ){
-			if( !$this->getModules()->has( $moduleId ) ){
-				$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
-				$this->restart();
+		try{
+			$modules	= array(
+				'Admin_Instances',
+				'Admin_Modules',
+				'Admin_Module_Sources',
+				'Admin_Module_Installer',
+				'Admin_Module_Editor',
+				'Admin_Module_Creator',
+				'UI_Helper_Content',
+				'JS_Layer',
+			);
+			foreach( $modules as $moduleId ){
+				if( !$this->getModules()->has( $moduleId ) ){
+					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
+					$this->restart();
+				}
 			}
+		}
+		catch( Exception_Logic $e ){
+			die( UI_HTML_Exception_Page::display( $e ) );
+		} 
+		catch( Exception $e ){
+			die( UI_HTML_Exception_Page::display( $e ) );
 		}
 	}
 
