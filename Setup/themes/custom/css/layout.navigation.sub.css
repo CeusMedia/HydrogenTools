@@ -2,6 +2,8 @@
 #layout-navigation-sub {
 	display: block;
 	width: 100%;
+	max-width: 960px;
+	margin: 0px auto;
 	}
 #layout-navigation-sub-inner {
 	width: 980px;
