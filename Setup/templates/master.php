@@ -57,23 +57,24 @@ $badges		= '<span>'.join( '</span><span>', $badges ).'</span>';
 
 $path		= $env->getRequest()->get( 'path' );
 $body		= '
-<div id="layout-navigation-top" style="margin: 0px auto; max-width: 960px; position: relative;">
-	<div style="position: absolute; top: 5px; right: 0px; z-index: 100;">
-		<select onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
+<div id="layout-navigation-top">
+	<div id="selector-instance">
+		<label for="input_instanceId">Instanz:</label>&nbsp;
+		<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
 	</div>
 </div>
 <div id="layout-header"></div>
-<div id="layout-navigation" style="border-bottom: 5px solid #008FAF; background-color: #F7F7F7;">
-	<div id="layout-navigation-main" style="background-color: #F7F7F7; margin: 0px auto; max-width: 960px; position: relative; ">
+<div id="layout-navigation">
+	<div id="layout-navigation-main">
 		'.$naviMain.'
 	</div>
 </div>
-<div id="layout-navigation-sub" style="margin: 0px auto; max-width: 960px">
+<div id="layout-navigation-sub">
 	'.$naviSub.'
 </div>
-<div id="layout-field" style="margin: 0px auto; max-width: 960px">
+<div id="layout-field">
 	<div id="layout-messenger">'.$messenger->buildMessages().'</div>
-	<div id="layout-content" style="padding: 1em 0em">'.$content.'</div>
+	<div id="layout-content">'.$content.'</div>
 </div>
 <div id="layer-dev">
 	'.$dev.'
