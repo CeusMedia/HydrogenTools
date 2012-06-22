@@ -20,6 +20,8 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->checkSources();																		//  create local cmFrameworks copy as first module source of none are defined yet
 		$this->checkThemes();																		//  link in petrol theme is missing
 
+		$this->pathConfig	= '';
+		
 		$pathModules	= CMF_PATH.'modules/Hydrogen/';												//  
 		if( !preg_match( '/^\//', $pathModules ) )													//  module path is not absolute @todo kriss: remove
 			$pathModules	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathModules;							//  prepend document root to module path @todo kriss: remove
@@ -148,6 +150,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	}
 	
 	protected function initRemote( $forceInstanceId = NULL ){
+		$messenger		= $this->getMessenger();
 		$instance		= $this;
 		$this->remote	= $this;																	//  use own environment by default
 
@@ -170,7 +173,8 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 						throw new InvalidArgumentException( 'Requested instance "'.$requestedId.'" is not existing' );
 					$this->session->set( 'instanceId', $requestedId );								//  store instance ID in session
 					$instance	=  $instances[$requestedId];										//  get forced instance's environment
-					
+					if( $requestedId != $sessionedId )
+						$messenger->noteNotice( 'Instanz ausgewählt: <cite>'.$instance->title.'</cite>' );
 				}
 				else if( $sessionedId ){															//  an instance has been selected before
 					if( !array_key_exists( $sessionedId, $instances ) ){							//  but is not configured anymore
@@ -178,6 +182,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 						throw new InvalidArgumentException( 'Selected instance "'.$sessionedId.'" is not existing anymore' );
 					}
 					$instance	= $instances[$sessionedId];											//  get instance environment
+				}
+				else{
+					$instanceId	=  array_shift( array_keys( $instances ) );
+					$this->session->set( 'instanceId', $instanceId );								//  store instance ID in session
 				}
 			}
 			$pathApp		= $instance->path;
