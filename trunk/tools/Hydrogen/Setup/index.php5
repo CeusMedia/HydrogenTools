@@ -8,7 +8,7 @@ require_once $pathCMC.'autoload.php5';
 require_once $pathCMF.'autoload.php5';
 require_once $pathCMM.'autoload.php5';
 
-$instanceId		= 'Setup';
+$instanceId		= NULL;//'Setup';
 
 CMC_Loader::registerNew( 'php5', 'Tool_Hydrogen_Setup_', 'classes/' );
 CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
