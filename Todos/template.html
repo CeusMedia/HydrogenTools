@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Todos</title>
+		<link rel="stylesheet" href="//css.ceusmedia.de/blueprint/reset.css"/>
+		<link rel="stylesheet" href="//css.ceusmedia.de/blueprint/typography.css"/>
+		<link rel="stylesheet" href="//css.ceusmedia.de/xmp.formats.css"/>
+		<link rel="stylesheet" href="style.css"/>
+		<link rel="stylesheet" href="indicator.css"/>
+		<script src="//js.ceusmedia.de/jquery/1.7.min.js"/></script>
+	</head>
+	<body>
+		<div id="results" style="">
+			<div id="action-refresh">
+				<a href="./?refresh" title="refresh"><img src="http://img.int1a.net/famfamfam/mini/borderless/png/action_refresh_blue.png" alt="refresh"/></a>
+			</div>
+			<h3>Statistics</h3>
+			<dl>
+				<dt>Files scanned: </dt>
+				<dd><%filesTotal%></dd>
+				<dt>Files found: </dt>
+				<dd><%filesFound%></dd>
+				<dt>Ratio: </dt>
+				<dd><%filesRatio%>%</dd>
+			</dl>
+			<div style="clear: both"></div>
+			<hr/>
+			<dl>
+				<dt>Lines scanned: </dt>
+				<dd><%linesTotal%></dd>
+				<dt>Todos found: </dt>
+				<dd><%linesFound%></dd>
+				<dt>Ratio: </dt>
+				<dd><%linesRatio%>%</dd>
+			</dl>
+			<div style="clear: both"></div>
+			<br/>
+			<%indicator%>
+			<br/>
+			<br/>
+			<h3>Formats</h3>
+			<a href="./?format=json">JSON</a><br/>
+			<a href="./?format=serial">Serial</a><br/>
+			<a href="./?format=indicator">Indicator</a><br/>
+		</div>
+		<div id="content">
+			<%list%>
+		</div>
+	</body>
+</html>

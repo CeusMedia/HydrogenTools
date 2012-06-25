@@ -1,0 +1,74 @@
+body {
+	margin: 1em;
+	}
+
+#results {
+	float: left;
+	width: 155px;
+	padding: 1em;
+	}
+#results #action-refresh {
+	float: right;
+	background-color: #DDD;
+	border-width: 2px;
+	border-style: groove;
+	border-color: #FFF #DDD #DDD #FFF;
+	border-radius: 5px;
+	padding: 2px;
+	}
+#results dl:after {
+	clear: both;
+	content: '.';
+	visibility: hidden;
+	}
+#results dl dt {
+	float: left;
+	clear: both;
+	}
+#results dl dd {
+	float: right;
+	}
+	
+#content {
+	margin-left: 200px;
+	}
+#content ol.files {
+	background-color:  #FFF;
+	}
+#content ol.files li {
+	list-style-type: decimal;
+	list-style-position: inside;
+	padding: 5px 12px;
+	font-size: 1.2em;
+	}
+#content ol.files li:last-child {
+	border: none;
+	}
+#content ol.files li span.file {
+	font-size: 1em
+	}
+#content ol.files li span.path {
+	margin-right: 0.3em;
+	font-size: 0.9em;
+	color: gray;
+	}
+#content ol.files li span.ext {
+	margin-left: 0.25em;
+	font-size: 0.8em;
+	color: gray;
+	}
+#content ol.files li span.number {}
+#content ol.files li span.number:before {
+	content: " (";
+	}
+#content ol.files li span.number:after {
+	content: ")";
+	}
+#content ol.files li xmp.code {
+	display: none;
+	font-size: 0.8em;
+	/* @see http://stackoverflow.com/a/8662852 */
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	}

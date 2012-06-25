@@ -1,0 +1,14 @@
+div.indicator {}
+div.indicator span.indicator-outer {
+	border: 1px solid black;
+	width: 150px;
+	display: block;
+	}
+div.indicator div.indicator-inner {
+	background-color: blue;
+	height: 12px;
+	}
+div.indicator span.indicator-percentage,
+div.indicator span.indicator-ratio {
+	display: none;
+	}
