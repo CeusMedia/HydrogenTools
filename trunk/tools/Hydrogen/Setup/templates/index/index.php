@@ -43,6 +43,41 @@ $panelList	= '
 	'.$list.'
 </fieldset>';
 
+$l	= array();
+foreach( $modules as $module ){
+	$list	= array();
+	foreach( $module->config as $item ){
+		if( preg_match( '/password|secret/', $item->key ) )
+			$item->value	= str_repeat( '*', strlen( $item->value ) );
+		$value	= $item->value;
+		switch( $item->type ){
+			case 'boolean':
+			case 'bool':
+				$value	= '<em style="color: #444">'.( ( (bool) $value ) ? "yes" : "no" ).'</em>';
+				break;
+			case 'integer':
+			case 'int':
+			case 'float':
+				$value	= '<span style="font-family: monospace; font-size: 1.2em;">'.$value.'</span>';
+				break;
+			default:
+				$value	= strlen( trim( $value ) ) ? htmlentities( $value ) : '&empty;';
+		}
+		$list[$item->key]	= '<dt>'.$item->key.'</dt><dd>'.$value.'</dd>';
+	}
+	natcasesort( $list );
+	if( $list )
+		$l[]	= '<h4 class="index-config-module">'.$module->title.'</h4><dl class="index-config">'.join( $list ).'</dl>';
+}
+$panelConfig	= '
+<fieldset>
+	<legend class="info">Konfiguration</legend>
+	<div style="/*max-height: 260px; overflow: auto*/">
+		'.join( $l ).'
+	</div>
+</fieldset>';
+
+/*
 $listConfig	= array();
 foreach( $remoteConfig->getAll() as $key => $value )
 	if( !preg_match( '/password|secret/', $key ) )
@@ -55,6 +90,7 @@ $panelConfig	= '
 		<dl>'.join( $listConfig ).'</dl>
 	</div>
 </fieldset>';
+ */
 
 $listModules	= array();
 foreach( $modules as $moduleId => $module ){
@@ -152,7 +188,42 @@ ul.instances li.check-fail {
 	}
 ul.instances li.active a {
 	}
+
+.index-config-module {
+	cursor: pointer;
+	background-color: #EFEFEF;
+	padding: 4px 10px 2px 10px;
+	height: 1.5em;
+	line-height: 1.5em;
+	}
+
+dl.index-config {
+	display: none;
+	}
+dl.index-config dt {
+	clear: both;
+	float: left;
+	margin: 0px;
+	padding: 1px 2px 1px 10px;
+	font-weight: normal;
+	font-size: 1.0em;
+	}
+dl.index-config dd {
+	margin: 0px;
+	padding: 0px 6px 0px 0px;
+	border-bottom: 1px solid #DDD;
+	text-align: right;
+	min-height: 18px;
+	font-size: 1.1em;
+	}
+
+
 </style>
+<script>
+$(document).ready(function(){
+	$(".index-config-module").bind("click",function(){$(this).next().slideToggle();});
+});
+</script>
 <br/>
 <div class="column-left-25">
 	'.$panelList.'
