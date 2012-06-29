@@ -95,18 +95,22 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 */
 		try{
 			$modules	= array(
-				'Admin_Instances',
-				'Admin_Modules',
-				'Admin_Module_Sources',
-				'Admin_Module_Installer',
-				'Admin_Module_Editor',
-				'Admin_Module_Creator',
-				'UI_Helper_Content',
-				'JS_Layer',
+				'Admin_Instances'			=> array(),
+				'Admin_Modules'				=> array(),
+				'Admin_Module_Sources'		=> array(),
+				'Admin_Module_Installer'	=> array(),
+				'Admin_Module_Editor'		=> array(),
+				'Admin_Module_Creator'		=> array(),
+				'UI_Helper_Content'			=> array(),
+				'JS_Layer'					=> array(),
+				'Resource_Cache'			=> array(
+					'type'		=> 'Folder',
+					'resource'	=> 'tmp/cache/'
+				),
 			);
-			foreach( $modules as $moduleId ){
+			foreach( $modules as $moduleId => $settings ){
 				if( !$this->getModules()->has( $moduleId ) ){
-					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, array(), TRUE );
+					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, $settings, TRUE );
 					$this->restart();
 				}
 			}
