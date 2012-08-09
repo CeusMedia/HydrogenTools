@@ -5,6 +5,32 @@ class JsError_Dispatcher{
 
 	public function __construct(){
 		$this->request	= new Net_HTTP_Request_Receiver();
+		if( !getEnv( 'HTTP_HOST' ) ){
+			$this->initConfig();
+			if( $this->config['uberlog.active'] ){
+				$this->initDatabase();
+				$model		= new JsError_Model( $this->database, $this->config );
+				$records	= $model->index();
+				foreach( $records as $record ){
+					$data	= array(
+						'client'	=> $record['agent'],
+						'timestamp'	=> $record['timestamp'],
+						'type'		=> $record['type'],
+						'source'	=> $record['uri'],
+						'line'		=> $record['line'],
+						'message'	=> $record['message'],
+						'category'	=> $this->config['uberlog.category'],
+					);
+					$curl	= new Net_CURL( $this->config['uberlog.url'].'?record' );
+					$curl->setOption( CURLOPT_POST, TRUE );
+					$curl->setOption( CURLOPT_RETURNTRANSFER, TRUE );
+					$curl->setOption( CURLOPT_POSTFIELDS, $data );
+					$curl->exec();
+					$model->remove( $record['jsErrorId'] );
+				}
+			}
+			exit;
+		}
 		if( $this->request->isAjax() ){
 			$response	= (object) array(
 				'status'	=> 'data',
