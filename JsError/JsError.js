@@ -14,9 +14,9 @@ JsError = {
 			dataType: "json",
 			success: JsError.handleToolResponse
 		});
-		return false;
 		if( !( "console" in window && "firebug" in console ) )						//  if no Firebug available
 			return true;															//  show no Error in Browser
+		return false;
 	},
 	handleToolResponse: function(response){
 		switch(response.status){
@@ -24,9 +24,9 @@ JsError = {
 				alert(response.error);
 				break;
 			case "data":
-				console.log(response.data);
+				if( "console" in window )											//  if console available
+					console.log(response.data);
 				break;
 		}
-		
 	}
 };

@@ -5,3 +5,6 @@ database.name		= "log.sqlite"
 database.username	= ""
 database.password	= ""
 database.prefix		= ""
+
+uberlog.active		= no
+uberlog.url			= "http://example.org/uberlog/"
