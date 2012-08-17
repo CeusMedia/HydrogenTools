@@ -60,11 +60,16 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	}
 
 	protected function checkConfig(){
-		if( !file_exists( self::$configFile ) ){
-			copy( self::$configFile.'.dist', self::$configFile );
-			$editor	= new File_INI_Editor( self::$configFile );
-			$editor->setProperty( 'app.base.url', $this->url );
-		}
+		if( file_exists( self::$configFile ) )
+			return;
+		copy( self::$configFile.'.dist', self::$configFile );
+		$editor	= new File_INI_Editor( self::$configFile );
+		$editor->setProperty( 'app.base.url', $this->url );
+		$screen	= "Setup is installing. Please wait...<script>/*document.location.reload()*/</script>";
+		if( file_exists( 'locales/en/html/env.installing.html' ) )
+			$screen	= File_Reader::load( 'locales/en/html/env.installing.html' );
+		print( $screen );
+		exit;
 	}
 
 	protected function checkInstances(){
