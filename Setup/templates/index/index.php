@@ -44,7 +44,7 @@ $panelList	= '
 </fieldset>';
 
 $l	= array();
-foreach( $modules as $module ){
+foreach( $modulesInstalled as $module ){
 	$list	= array();
 	foreach( $module->config as $item ){
 		if( preg_match( '/password|secret/', $item->key ) )
@@ -92,25 +92,83 @@ $panelConfig	= '
 </fieldset>';
  */
 
-$listModules	= array();
-foreach( $modules as $moduleId => $module ){
+/*  --  LIST: MODULES INSTALLED  --  */
+$listModulesInstalled	= array();
+foreach( $modulesInstalled as $moduleId => $module ){
 	$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
 	$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
 	$label	= '<span class="module">'.$label.'</span>';
 	$link	= '<a href="./admin/module/editor/view/'.$moduleId.'">'.$label.'</a>';
-	$listModules[$module->title]	= '<li>'.$link.'</li>';	
+	$listModulesInstalled[$module->title]	= '<li>'.$link.'</li>';	
 }
-natcasesort( $listModules );
-$panelModules	= '
+natcasesort( $listModulesInstalled );
+$panelModulesInstalled	= '
 <fieldset style="position: relative">
-	<legend class="info">Module <span class="small">('.count( $modules ).')</span></legend>
+	<legend class="info">Module installiert <span class="small">('.count( $listModulesInstalled ).')</span></legend>
 	<div style="position: absolute; right: 8px; top: 16px;">
 		'.UI_HTML_Elements::LinkButton( './admin/module/installer', '', 'button tiny icon add' ).'
 	</div>
 	<div style="max-height: 160px; overflow: auto">
-		<ul>'.join( $listModules ).'</ul>
+		<ul>'.join( $listModulesInstalled ).'</ul>
 	</div>
 </fieldset>';
+
+/*  --  LIST: MODULES MISSING  --  */
+$listModulesMissing	= array();
+$listModulesPossible	= array();
+foreach( $modulesMissing as $moduleId ){
+	$label	= $moduleId;
+	if( array_key_exists( $moduleId, $modulesAll ) ){
+		$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
+		$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
+	}
+	$label	= '<span class="module">'.$label.'</span>';
+	$link	= '<a href="./admin/module/editor/view/'.$moduleId.'">'.$label.'</a>';
+	$listModulesMissing[$module->title]	= '<li>'.$link.'</li>';	
+}
+foreach( $modulesPossible as $moduleId ){
+	$label	= $moduleId;
+	if( array_key_exists( $moduleId, $modulesAll ) ){
+		$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
+		$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
+	}
+	$label	= '<span class="module">'.$label.'</span>';
+	$link	= '<a href="./admin/module/editor/view/'.$moduleId.'">'.$label.'</a>';
+	$listModulesPossible[$module->title]	= '<li>'.$link.'</li>';	
+}
+natcasesort( $listModulesMissing );
+natcasesort( $listModulesPossible );
+
+$list	= array();
+if( $listModulesMissing )
+	$list[]	= '<dt>Fehlen</dt><dd><ul>'.join( $listModulesMissing ).'</ul></dd>';
+if( $listModulesPossible )
+	$list[]	= '<dt>Unterstützt</dt><dd><ul>'.join( $listModulesPossible ).'</ul></dd>';
+
+$panelModulesRelated	= '
+<fieldset style="position: relative">
+	<legend class="info">Modulebeziehungen <span class="small">('.count( $listModulesMissing ).')</span></legend>
+	<div style="max-height: 160px; overflow: auto">
+		<dl>'.join( $list ).'</dl>
+	</div>
+</fieldset>';
+
+
+$panelModules	= '
+<fieldset style="position: relative">
+	<legend class="info">Module</legend>
+<!--	<div style="position: absolute; right: 8px; top: 16px;">
+		'.UI_HTML_Elements::LinkButton( './admin/module/installer', '', 'button tiny icon add' ).'
+	</div>
+	<div style="max-height: 160px; overflow: auto">-->
+		<ul>
+			<li>'.count( $modulesInstalled ).' installiert</li>
+			<li>'.count( $modulesMissing ).' fehlen</li>
+			<li>'.count( $modulesPossible ).' möglich</li>
+		</ul>
+<!--	</div>
+--></fieldset>';
+
 
 $name	= '<cite>'.$remoteConfig->get( 'app.name' ).'</cite>';
 if( strlen( $remoteConfig->get( 'app.version' ) ) )
@@ -235,6 +293,14 @@ $(document).ready(function(){
 	</div>
 	<div class="column-right-50">
 		'.$panelModules.'
+	</div>
+	<div class="column-clear">
+		<div class="column-left-50">
+			'.$panelModulesInstalled.'
+		</div>
+		<div class="column-right-50">
+			'.$panelModulesRelated.'
+		</div>
 	</div>
 	<div class="column-clear">
 		'.$panelConfig.'

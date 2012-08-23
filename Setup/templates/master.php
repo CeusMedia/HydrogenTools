@@ -2,6 +2,7 @@
 //	if( $env->getRequest()->isAjax() )								// this is an AJAX request
 //		return $content;													// deliver content only
 
+$layers		= array();
 $links		= $words['links'];
 $sublinks	= array( 'admin/module' => $words['links_admin_module'] );
 
@@ -55,13 +56,34 @@ $badges[]	= '<a href="http://jigsaw.w3.org/css-validator/check/referer"><img sty
 $infos		= '<span>'.join( '</span><span>', $infos ).'</span>';
 $badges		= '<span>'.join( '</span><span>', $badges ).'</span>';
 
+
 $path		= $env->getRequest()->get( 'path' );
 $body		= '
+<style>
+#layout-navigation-triggers {
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	text-align: right;
+	margin: 0px auto;
+	max-width: 960px;
+	z-index: 100;
+	width: 100%;
+	background-color: #FFFFFF;
+	opacity: 0.25;
+	}
+#layout-navigation-triggers:hover {
+	opacity: 0.75;
+	}
+</style>
 <div id="layout-navigation-top">
 	<div id="selector-instance">
 		<label for="input_instanceId">Instanz:</label>&nbsp;
 		<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
 	</div>
+</div>
+<div id="layout-navigation-triggers">
+	<button type="button" id="layer-dev-profiler-trigger">Profiler</button>
 </div>
 <div id="layout-header"></div>
 <div id="layout-navigation">
@@ -90,7 +112,32 @@ $body		= '
 		<div style="clear: both"></div>
 	</div>
 </div>
-<script>$(document).ready(function(){});</script>';
+<script>
+$(document).ready(function(){
+	$(".layer-dev").each(function(){
+		$(this).bind("click",function(){$(this).parent().fadeOut(function(){$(this).hide()});});
+		var id = $(this).attr("id");
+		var trigger	= $("#"+id+"-trigger");
+		trigger.bind("click",{id: id},function(event){
+			console.log(event.data);
+			$("#"+event.data.id).show().parent().fadeIn();
+		})
+	});
+});
+</script>';
+
+$env->clock->profiler->tick( 'interface: master' );
+#print_m( array_keys( $env->getModules()->getAll() ) );
+#die;
+
+if( $env->getModules()->has( 'UI_Helper_Dev_Profiler' ) )
+	$layers['profiler']	= View_Helper_DevProfiler::render( $env, 0.01 );
+#print_m( $layers );
+#die;
+
+foreach( $layers as $key => $value  )
+	$layers[$key]	= '<div class="layer-dev" id="layer-dev-'.$key.'">'.$value.'</div>';
+$layers	= '<div class="layer-dev-container">'.join( $layers ).'</div>';
 
 $pathJsLib		= $config->get( 'path.scripts.lib' );
 $pathCssLib		= $config->get( 'path.styles.lib' );
@@ -117,6 +164,7 @@ $page->addThemeStyle( 'layout.footer.css' );
 $page->addThemeStyle( 'layer.css' );
 $page->addThemeStyle( 'table.css' );
 $page->addThemeStyle( 'style.css' );
+$page->addBody( $layers );
 $page->addBody( $body );
 $page->setPackaging( FALSE, FALSE );
 return $page->build();

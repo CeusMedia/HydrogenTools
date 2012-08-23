@@ -43,10 +43,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			require_once $pathModules.'Admin/Modules/classes/Model/Module.php5';					//  load atleast module model class
 			require_once $pathModules.'Admin/Modules/classes/Logic/Module.php5';					//  and module logic class for installating missing modules
 		}
-		
+
 		$this->initSession();																		//  setup session support
 		$this->initMessenger();																		//  setup user interface messenger
-//		$this->initDatabase();																		//  setup database connection
+		$this->initDatabase();																		//  setup database connection
 		$this->initCache();																			//  setup cache support
 		$this->initRequest();																		//  setup HTTP request handler
 		$this->initResponse();																		//  setup HTTP response handler
@@ -55,10 +55,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initPage();																			//  
 		$this->initAcl();																			//  
 		$this->initRemote( $forceInstanceId );														//  
-
 		$this->checkModules();																		//  try to install missing modules
 	}
-
+	
 	protected function checkConfig(){
 		if( file_exists( self::$configFile ) )														//  config file is existing
 			return;																					//  
@@ -86,7 +85,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
 		$modelSource	= new Model_ModuleSource( $this );
 		$modelInstance	= new Model_Instance( $this );
-		$logic			= new Logic_Module( $this );
+		$logic			= Logic_Module::getInstance( $this );
 /*		remark( "Sources:" );
 		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
 		remark( "Instances:" );
@@ -126,6 +125,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		catch( Exception $e ){
 			die( UI_HTML_Exception_Page::display( $e ) );
 		}
+		$this->clock->profiler->tick( 'env: check: modules' );
 	}
 
 	protected function checkSources(){
@@ -219,6 +219,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$this->pathApp		= $pathApp;
 			$this->pathConfig	= $pathApp.$pathConfig;
 		}
+		$this->clock->profiler->tick( 'env: remote' );
 	}
 
 	protected function restart(){
