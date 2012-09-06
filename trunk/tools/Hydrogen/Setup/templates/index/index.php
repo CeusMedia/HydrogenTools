@@ -170,13 +170,13 @@ $panelModules	= '
 --></fieldset>';
 
 
-$name	= '<cite>'.$remoteConfig->get( 'app.name' ).'</cite>';
+$name		= '<cite>'.$remoteConfig->get( 'app.name' ).'</cite>';
 if( strlen( $remoteConfig->get( 'app.version' ) ) )
 	$name	.= ' <span class="small">v'.$remoteConfig->get( 'app.version' ).'</span>';
 if( strlen( $remoteConfig->get( 'app.revision' ) ) )
 	$name	.= ' <span class="small">rev'.$remoteConfig->get( 'app.version' ).'</span>';
 
-$link	= '<a href="'.$remoteConfig->get( 'app.base.url' ).'">'.$remoteConfig->get( 'app.base.url' ).'</a>';
+$link		= '<a href="'.$remoteConfig->get( 'app.base.url' ).'">'.$remoteConfig->get( 'app.base.url' ).'</a>';
 $panelInfo	= '
 <fieldset style="position: relative">
 	<legend class="info">Application Instance Information</legend>
@@ -194,15 +194,29 @@ $diskTotal	= (double) disk_total_space( __DIR__ );
 $diskFree	= (double) disk_free_space( __DIR__ );
 $diskRatio	= round( $diskFree / $diskTotal * 100, 1 ); 
 
+#$diskTotal	= 10;
+#$diskFree	= 1.9;
+$space		= min( 2, $diskFree / $diskTotal * 10 ) / 2;
+$indicator	= new UI_HTML_Indicator();
+$space		= $indicator->build( $space, 1 );
+
 $configCMC	= parse_ini_file( CMC_PATH.'../cmClasses.ini', TRUE );
 $versionCMC	= $configCMC['project']['version'];
+
+$cores		= countCores();
+$load		= array_shift( sys_getloadavg() ) / $cores;
+$load		= 1 / ( 1 + $load );
+$indicator	= new UI_HTML_Indicator();
+$load		= $indicator->build( $load, 1 );
 
 $panelSystem	= '
 <fieldset>
 	<legend class="info">Server</legend>
 	<dl>
-		<dt>CPU Load</dt><dd>'.array_shift( sys_getloadavg() ).' @ '.countCores().' cores</dd>
-		<dt>Disk Space</dt><dd>'.Alg_UnitFormater::formatBytes( $diskFree, 1 ).' / '.Alg_UnitFormater::formatBytes( $diskTotal, 1 ).' ('.$diskRatio.'% frei)</dd>
+		<dt>CPU Load<div class="info-graph">'.$load.'</div></dt>
+		<dd>'.array_shift( sys_getloadavg() ).' @ '.$cores.' cores</dd>
+		<dt>Disk Space<div class="info-graph">'.$space.'</div></dt>
+		<dd>'.$diskRatio.'% frei <small>('.Alg_UnitFormater::formatBytes( $diskFree, 1 ).' / '.Alg_UnitFormater::formatBytes( $diskTotal, 1 ).')</small></dd>
 		<dt>Server Software</dt><dd>
 			<ul>
 				<li>'.$_SERVER['SERVER_SOFTWARE'].'</li>
@@ -275,6 +289,10 @@ dl.index-config dd {
 	font-size: 1.1em;
 	}
 
+.info-graph {
+	float: right;
+	padding-top: 2px;
+	}
 
 </style>
 <script>
