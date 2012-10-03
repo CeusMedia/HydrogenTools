@@ -1,0 +1,10 @@
+<?php
+$pathLibs		= '';
+$versionCMC		= '';
+$versionCMF		= '';
+$path			= '';
+$exts			= '';
+
+//  --  DO NOT CHANGE BELOW  --  //
+require_once 'todos.php5';
+?>
