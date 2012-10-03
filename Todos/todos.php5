@@ -8,8 +8,7 @@ if( empty( $versionCMF ) )
 
 require_once $pathLibs.'cmClasses/'.$versionCMC.'/autoload.php5';
 require_once $pathLibs.'cmFrameworks/'.$versionCMF.'/autoload.php5';
-
-CMC_Loader::registerNew( 'php5', NULL, dirname( __FILE__ ).'/..' );
+require_once dirname( __FILE__ ).'/Tool.php5';
 if( empty( $path ) )
 	$path	= dirname( dirname( dirname( getEnv( 'SCRIPT_FILENAME' ) ) ) ).'/';
 if( empty( $exts ) )
