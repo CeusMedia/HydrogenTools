@@ -3,11 +3,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 
 	/**	@var	CMF_Hydrogen_Environment_Remote	$remote		Instance of remote environment */
 	public $remote;
-	
+
 	public function __construct( $forceInstanceId = NULL ){
 
 		self::$classRouter	= 'CMF_Hydrogen_Environment_Router_Recursive';
 		self::$configFile	= "config/config.ini";
+
+		date_default_timezone_set( "Europe/Berlin" );
 
 		$this->host	= getEnv( 'HTTP_HOST' );
 		$this->root	= getEnv( 'DOCUMENT_ROOT' );
@@ -21,7 +23,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->checkThemes();																		//  link in petrol theme is missing
 
 		$this->pathConfig	= '';
-		
+
 		$pathModules	= CMF_PATH.'modules/Hydrogen/';												//  
 		if( !preg_match( '/^\//', $pathModules ) )													//  module path is not absolute @todo kriss: remove
 			$pathModules	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathModules;							//  prepend document root to module path @todo kriss: remove
@@ -57,7 +59,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initRemote( $forceInstanceId );														//  
 		$this->checkModules();																		//  try to install missing modules
 	}
-	
+
 	protected function checkConfig(){
 		if( file_exists( self::$configFile ) )														//  config file is existing
 			return;																					//  
@@ -94,7 +96,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		print_m( $logic->getCategories() );
 		remark( "Modules installed:" );
 		print_m( array_keys( $logic->model->getInstalled() ) );
-		
+
 #		$logic->uninstallModule( $moduleId );
 */
 		try{
@@ -106,6 +108,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 				'Admin_Module_Editor'		=> array(),
 				'Admin_Module_Creator'		=> array(),
 				'UI_Helper_Content'			=> array(),
+				'UI_CSS_Reset'				=> array(),
+				'UI_Indicator'				=> array(),
+				'JS_jQuery'					=> array(),
+				'JS_jQuery_UI'				=> array(),
 				'JS_Layer'					=> array(),
 				'Resource_Cache'			=> array(
 					'type'		=> 'Folder',
@@ -121,7 +127,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		}
 		catch( Exception_Logic $e ){
 			die( UI_HTML_Exception_Page::display( $e ) );
-		} 
+		}
 		catch( Exception $e ){
 			die( UI_HTML_Exception_Page::display( $e ) );
 		}
@@ -137,7 +143,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$this->restart();
 		}
 	}
-	
+
 	protected function checkThemes(){
 		if( !file_exists( 'themes/petrol' ) ){
 			$source	= CMF_PATH.'themes/Hydrogen/petrol';
@@ -157,14 +163,14 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	public function getRemote(){
 		return $this->remote;
 	}
-	
+
 	protected function initRemote( $forceInstanceId = NULL ){
 		$messenger		= $this->getMessenger();
 		$instance		= $this;
 		$this->remote	= $this;																	//  use own environment by default
 
 		if( class_exists( 'Model_Instance' ) ){														//  module for instance support is installed
-			
+
 			$model		= new Model_Instance( $this );												//  create model for reading instance settings
 			$instances	= $model->getAll();															//  get all configured instances
 			if( count( $instances ) == 1 )															//  only one instance is configured

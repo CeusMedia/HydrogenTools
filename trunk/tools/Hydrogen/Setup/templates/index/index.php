@@ -95,7 +95,8 @@ $panelConfig	= '
 /*  --  LIST: MODULES INSTALLED  --  */
 $listModulesInstalled	= array();
 foreach( $modulesInstalled as $moduleId => $module ){
-	$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
+	$desc	= explode( "\n", $module->description );
+	$desc	= trim( array_shift( $desc ) );
 	$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
 	$label	= '<span class="module">'.$label.'</span>';
 	$link	= '<a href="./admin/module/editor/view/'.$moduleId.'">'.$label.'</a>';
@@ -204,17 +205,18 @@ $configCMC	= parse_ini_file( CMC_PATH.'../cmClasses.ini', TRUE );
 $versionCMC	= $configCMC['project']['version'];
 
 $cores		= countCores();
-$load		= array_shift( sys_getloadavg() ) / $cores;
-$load		= 1 / ( 1 + $load );
+$loads		= sys_getloadavg();
+$load1		= array_shift( $loads );
+$load1Relative	= 1 / ( 1 + $load1 / $cores );
 $indicator	= new UI_HTML_Indicator();
-$load		= $indicator->build( $load, 1 );
+$loadGraph	= $indicator->build( $load1Relative, 1 );
 
 $panelSystem	= '
 <fieldset>
 	<legend class="info">Server</legend>
 	<dl>
-		<dt>CPU Load<div class="info-graph">'.$load.'</div></dt>
-		<dd>'.array_shift( sys_getloadavg() ).' @ '.$cores.' cores</dd>
+		<dt>CPU Load<div class="info-graph">'.$loadGraph.'</div></dt>
+		<dd>'.$load1.' @ '.$cores.' cores</dd>
 		<dt>Disk Space<div class="info-graph">'.$space.'</div></dt>
 		<dd>'.$diskRatio.'% frei <small>('.Alg_UnitFormater::formatBytes( $diskFree, 1 ).' / '.Alg_UnitFormater::formatBytes( $diskTotal, 1 ).')</small></dd>
 		<dt>Server Software</dt><dd>

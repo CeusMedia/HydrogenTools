@@ -143,13 +143,6 @@ $pathJsLib		= $config->get( 'path.scripts.lib' );
 $pathCssLib		= $config->get( 'path.styles.lib' );
 
 $page->setTitle( $words['main']['title'] );
-$page->addJavaScript( $pathJsLib.'jquery/1.7.min.js' );
-$page->js->addUrl( $pathJsLib.'jquery/ui/1.8.4/min.js' );
-$page->js->addUrl( 'javascripts/UI.Layer.js' );
-$page->js->addScript( '$(document).ready(function(){Layer.init();});' );
-$page->css->primer->addUrl( $pathJsLib.'jquery/ui/1.8.4/css/smoothness.css' );
-$page->css->primer->addUrl( $pathCssLib.'blueprint/reset.css' );
-$page->css->primer->addUrl( $pathCssLib.'blueprint/typography.css' );
 $page->css->primer->addUrl( $pathCssLib.'xmp.formats.css' );
 $page->css->primer->addUrl( $pathCssLib.'layout.column.css' );
 $page->addPrimerStyle( 'layout.messenger.css' );
@@ -166,6 +159,5 @@ $page->addThemeStyle( 'table.css' );
 $page->addThemeStyle( 'style.css' );
 $page->addBody( $layers );
 $page->addBody( $body );
-$page->setPackaging( FALSE, FALSE );
 return $page->build();
 ?>
