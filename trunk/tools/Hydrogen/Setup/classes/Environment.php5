@@ -76,7 +76,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		if( !file_exists( $fileName ) ){
 			File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
 			$editor	= new File_INI_Editor( $fileName, TRUE );
-			$editor->setProperty( 'path', $this->uri, 'Setup' );
+			$editor->setProperty( 'path', $this->uri, 'AppManager' );
 			$this->restart();
 		}
 	}
@@ -196,11 +196,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					}
 					$instance	= $instances[$sessionedId];											//  get instance environment
 				}
-				else{
+				else
 					$instanceId	=  array_shift( array_keys( $instances ) );
-					$this->session->set( 'instanceId', $instanceId );								//  store instance ID in session
-				}
 			}
+			$this->session->set( 'instanceId', $instance->id );										//  store instance ID in session
 			$pathApp		= $instance->path;
 			$pathConfig		= !empty( $instance->configPath ) ? $instance->configPath : "config/";
 			$fileConfig		= !empty( $instance->configFile ) ? $instance->configFile : "config.ini";
