@@ -11,11 +11,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 
 		date_default_timezone_set( "Europe/Berlin" );
 
-		$this->host	= getEnv( 'HTTP_HOST' );
-		$this->root	= getEnv( 'DOCUMENT_ROOT' );
-		$this->path	= dirname( getEnv( 'SCRIPT_NAME' ) ).'/';
-		$this->uri	= $this->root.$this->path;
-		$this->url	= 'http://'.$this->host.$this->path;
+		$this->detectSelf();
 
 		$this->checkConfig();																		//  create main configuation if missing
 		$this->checkInstances();																	//  create setup tool as first instance of none are defined yet
@@ -66,10 +62,12 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		File_Writer::save( self::$configFile, File_Reader::load( self::$configFile.'.dist' ) );		//  copy config file
 		$editor	= new File_INI_Editor( self::$configFile );											//  
 		$editor->setProperty( 'app.base.url', $this->url );											//  
-		$screen	= "Setup is installing. Please wait...<script>document.location.reload()</script>";	//  
+		$script	= '<script>document.location.reload()</script>';									//  
+		$screen	= "#AppName# is installing. Please wait...".$script;								//  
 		if( file_exists( 'locales/en/html/env.installing.html' ) )									//  
 			$screen	= File_Reader::load( 'locales/en/html/env.installing.html' );					//  
-		print( $screen );																			//  
+		$screen	= str_replace( "#AppName#", $editor->get( 'app.name' ), $screen );					//  inset application name from config
+		print( $screen );
 		exit;
 	}
 
