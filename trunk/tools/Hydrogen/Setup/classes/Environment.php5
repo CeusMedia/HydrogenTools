@@ -66,7 +66,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$screen	= "#AppName# is installing. Please wait...".$script;								//  
 		if( file_exists( 'locales/en/html/env.installing.html' ) )									//  
 			$screen	= File_Reader::load( 'locales/en/html/env.installing.html' );					//  
-		$screen	= str_replace( "#AppName#", $editor->get( 'app.name' ), $screen );					//  inset application name from config
+		$screen	= str_replace( "#AppName#", $editor->getProperty( 'app.name' ), $screen );			//  inset application name from config
 		print( $screen );
 		exit;
 	}
@@ -76,7 +76,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		if( !file_exists( $fileName ) ){
 			File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
 			$editor	= new File_INI_Editor( $fileName, TRUE );
-			$editor->setProperty( 'path', $this->uri, 'AppManager' );
+			$editor->setProperty( 'path', $this->uri, 'Setup' );
 			$this->restart();
 		}
 	}
@@ -197,7 +197,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					$instance	= $instances[$sessionedId];											//  get instance environment
 				}
 				else
-					$instanceId	=  array_shift( array_keys( $instances ) );
+					$instance	=  $instances[array_shift( array_keys( $instances ) )];
 			}
 			$this->session->set( 'instanceId', $instance->id );										//  store instance ID in session
 			$pathApp		= $instance->path;
