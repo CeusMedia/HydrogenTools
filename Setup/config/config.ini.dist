@@ -1,3 +1,4 @@
+app.name			= "Setup"
 app.base.url		= "http://localhost/sandbox/Hydrogen/tools/Setup/"
 
 path.module.config	= "config/modules/"

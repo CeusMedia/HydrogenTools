@@ -64,8 +64,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$editor->setProperty( 'app.base.url', $this->url );											//  
 		$script	= '<script>document.location.reload()</script>';									//  
 		$screen	= "#AppName# is installing. Please wait...".$script;								//  
-		if( file_exists( 'locales/en/html/env.installing.html' ) )									//  
-			$screen	= File_Reader::load( 'locales/en/html/env.installing.html' );					//  
+		$locale	= $editor->getProperty( 'locale.default' );
+		$file	= 'locales/'.$locale.'/html/env.installing.html';
+		if( file_exists( $file ) )																	//  
+			$screen	= File_Reader::load( $file );													//  
 		$screen	= str_replace( "#AppName#", $editor->getProperty( 'app.name' ), $screen );			//  inset application name from config
 		print( $screen );
 		exit;
