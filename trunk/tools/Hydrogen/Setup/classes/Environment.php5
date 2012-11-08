@@ -68,7 +68,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$file	= 'locales/'.$locale.'/html/env.installing.html';
 		if( file_exists( $file ) )																	//  
 			$screen	= File_Reader::load( $file );													//  
-		$screen	= str_replace( "#AppName#", $editor->getProperty( 'app.name' ), $screen );			//  inset application name from config
+		$screen	= str_replace( "#AppName#", $editor->getProperty( 'app.name' ), $screen );			//  insert application name from config
+		$screen	= str_replace( "#PathScripts#", $editor->getProperty( 'path.scripts' ), $screen );	//  insert path to scripts from config
+		$screen	= str_replace( "#PathImages#", $editor->getProperty( 'path.images' ), $screen );	//  insert path to images from config
+		$screen	= str_replace( "#Locale#", $locale, $screen );										//  insert locale key from config
 		print( $screen );
 		exit;
 	}
