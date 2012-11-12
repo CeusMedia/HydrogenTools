@@ -1,18 +1,20 @@
 <?php
-$pathCMC	= '/var/www/lib/cmClasses/trunk/';
-$pathCMF	= '/var/www/lib/cmFrameworks/trunk/';
-$pathCMM	= '/var/www/lib/cmModules/trunk/';
+/*  --  LIBRARY SETTINGS  --  */
+$verCMC		= '';
+$verCMF		= '';
+$verCMM		= '';
 
-/*  --  NO CHANGES NEEDED BELOW  --  */
-require_once $pathCMC.'autoload.php5';
-require_once $pathCMF.'autoload.php5';
-require_once $pathCMM.'autoload.php5';
+$classes	= array(
+	array( 'path' => 'classes/', 'prefix' => 'Tool_Hydrogen_Setup_' ),
+	array( 'path' => 'classes/' ),
+);
 
+/*  --  APPLICATION SETTINGS  --  */
 $instanceId		= NULL;//'Setup';
 
-CMC_Loader::registerNew( 'php5', 'Tool_Hydrogen_Setup_', 'classes/' );
-CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
-
+require_once 'boot.php5';
+	
+/*  --  RUN APPLICATION  --  */
 try{
 	$env	= new Tool_Hydrogen_Setup_Environment( $instanceId );
 	$app	= new Tool_Hydrogen_Setup_App( $env );
@@ -20,7 +22,5 @@ try{
 }
 catch( Exception $e ){
 	UI_HTML_Exception_Page::display( $e );
-	exit;
 }
-
 ?>
