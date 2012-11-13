@@ -173,7 +173,6 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->remote	= $this;																	//  use own environment by default
 
 		if( class_exists( 'Model_Instance' ) ){														//  module for instance support is installed
-
 			$model		= new Model_Instance( $this );												//  create model for reading instance settings
 			$instances	= $model->getAll();															//  get all configured instances
 			if( count( $instances ) == 1 )															//  only one instance is configured
@@ -204,8 +203,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 				else
 					$instance	=  $instances[array_shift( array_keys( $instances ) )];
 			}
-			$this->session->set( 'instanceId', $instance->id );										//  store instance ID in session
-			$pathApp		= $instance->path;
+			$pathApp		= $instance->uri;
 			$pathConfig		= !empty( $instance->configPath ) ? $instance->configPath : "config/";
 			$fileConfig		= !empty( $instance->configFile ) ? $instance->configFile : "config.ini";
 
