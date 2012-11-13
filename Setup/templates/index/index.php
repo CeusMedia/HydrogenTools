@@ -27,7 +27,7 @@ foreach( $instances as $instance ){
 		$instance->configPath	= 'config/';
 	if( empty( $instance->configFile ) )
 		$instance->configFile	= 'config.ini';
-	$configFile	= $instance->path.$instance->configPath.$instance->configFile;
+	$configFile	= $instance->uri.$instance->configPath.$instance->configFile;
 	$class	= array( file_exists( $configFile ) ? 'check-okay' : 'check-fail' );
 	if( $instanceId == $instance->id )
 		$class[]	= 'active';
