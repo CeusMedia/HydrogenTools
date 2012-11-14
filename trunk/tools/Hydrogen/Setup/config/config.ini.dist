@@ -1,5 +1,6 @@
 app.name			= "Setup"
 app.base.url		= "http://localhost/sandbox/Hydrogen/tools/Setup/"
+app.version			= "0.8"
 
 path.cache			= "tmp/cache/"
 path.module.config	= "config/modules/"
@@ -18,4 +19,6 @@ layout.theme		= "custom"
 
 locale.allowed		= "de,en"
 locale.default		= "de"
+
+system.cache.modules		= yes
 
