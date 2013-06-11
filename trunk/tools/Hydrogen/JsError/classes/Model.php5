@@ -13,6 +13,7 @@ class JsError_Model{
 			'timestamp'
 		);
 		$this->table	= new Database_PDO_TableWriter( $dbc, $tableName, $columns, 'jsErrorId' );
+		$this->dbc		= $dbc;
 	}
 
 	public function add( $data, $stripTags = TRUE ){
@@ -47,6 +48,15 @@ class JsError_Model{
 		$data	= $this->table->get( TRUE );
 		$this->table->delete();
 		return $data;
+	}
+
+	public function cleanup( $numberKeep ){
+		$results	= $this->dbc->query( "SELECT jsErrorId FROM ".$this->table->getTableName()." ORDER BY timestamp DESC LIMIT ".$numberKeep );
+		foreach( $results->fetchAll( PDO::FETCH_OBJ ) as $entry )
+			$ids[]	= $entry->jsErrorId;
+		$query	= "DELETE FROM ".$this->table->getTableName()." WHERE jsErrorId NOT IN (".join(",", $ids ).");";
+		$this->dbc->query( $query );
+		$this->dbc->query( 'VACUUM '.$this->table->getTableName() );
 	}
 }
 ?>
