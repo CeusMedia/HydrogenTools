@@ -117,8 +117,23 @@ class JsError_Dispatcher{
 				$model	= new JsError_Model( $this->database, $this->config );
 				$model->cleanup( $limit );
 				remark( microtime( TRUE ) - $start );
-				die;
-				break;
+				exit;
+			case 'purge':
+				$start	= microtime( TRUE );
+				$this->initConfig();
+				$this->initDatabase();
+				$model	= new JsError_Model( $this->database, $this->config );
+				$model->purge();
+				remark( microtime( TRUE ) - $start );
+				exit;
+			case 'vacuum':
+				$start	= microtime( TRUE );
+				$this->initConfig();
+				$this->initDatabase();
+				$model	= new JsError_Model( $this->database, $this->config );
+				$model->vacuum();
+				remark( microtime( TRUE ) - $start );
+				exit;
 			default:
 				$this->initConfig();
 				$this->initDatabase();
