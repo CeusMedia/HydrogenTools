@@ -66,10 +66,10 @@ class JsError_Dispatcher{
 		$dsn->setUsername( $c['database.username'] );
 		$dsn->setPassword( $c['database.password'] );
 		$this->database	= new Database_PDO_Connection( $dsn );
-		$this->database->setErrorLogFile( 'db.error.log' );
-		
+		$this->database->setErrorLogFile( 'logs/db.error.log' );
+//		$this->database->setStatementLogFile( 'logs/db.statements.log' );
 	}
-	
+
 	protected function dispatchAjax(){
 		$r	= $this->request;
 		switch( $r->get( 'action' ) ){
@@ -85,7 +85,7 @@ class JsError_Dispatcher{
 					$type	= 'file';
 					$code	= Net_Reader::readUrl( $r->get( 'file' ) );
 				}
-				
+
 				$data	= array(
 					'uri'		=> $r->get( 'file' ),
 					'line'		=> $r->get( 'line' ),
@@ -107,6 +107,17 @@ class JsError_Dispatcher{
 		$r	= $this->request;
 		switch( $r->get( 'action' ) ){
 			case 'catch':
+				break;
+			case 'cleanup':
+				$start	= microtime( TRUE );
+				$limit	= (int) $this->request->get( 'keep' );
+				$limit	= $limit > 100 ? $limit : 1000;
+				$this->initConfig();
+				$this->initDatabase();
+				$model	= new JsError_Model( $this->database, $this->config );
+				$model->cleanup( $limit );
+				remark( microtime( TRUE ) - $start );
+				die;
 				break;
 			default:
 				$this->initConfig();
