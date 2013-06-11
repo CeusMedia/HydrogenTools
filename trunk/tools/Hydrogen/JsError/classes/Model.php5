@@ -20,6 +20,15 @@ class JsError_Model{
 		return $this->table->insert( $data, $stripTags );
 	}
 
+	public function cleanup( $numberKeep ){
+		$results	= $this->dbc->query( "SELECT jsErrorId FROM ".$this->table->getTableName()." ORDER BY timestamp DESC LIMIT ".$numberKeep );
+		foreach( $results->fetchAll( PDO::FETCH_OBJ ) as $entry )
+			$ids[]	= $entry->jsErrorId;
+		$query	= "DELETE FROM ".$this->table->getTableName()." WHERE jsErrorId NOT IN (".join(",", $ids ).");";
+		$this->dbc->query( $query );
+		$this->vacuum();
+	}
+
 	public function edit( $id, $data, $stripTags = TRUE ){
 		$this->table->defocus();
 		$this->table->focusPrimary( $id );
@@ -50,13 +59,13 @@ class JsError_Model{
 		return $data;
 	}
 
-	public function cleanup( $numberKeep ){
-		$results	= $this->dbc->query( "SELECT jsErrorId FROM ".$this->table->getTableName()." ORDER BY timestamp DESC LIMIT ".$numberKeep );
-		foreach( $results->fetchAll( PDO::FETCH_OBJ ) as $entry )
-			$ids[]	= $entry->jsErrorId;
-		$query	= "DELETE FROM ".$this->table->getTableName()." WHERE jsErrorId NOT IN (".join(",", $ids ).");";
-		$this->dbc->query( $query );
-		$this->dbc->query( 'VACUUM '.$this->table->getTableName() );
+	public function purge(){
+		$this->dbc->query( "DELETE FROM ".$this->table->getTableName()." WHERE 1" );
+		$this->vacuum();
+	}
+
+	public function vacuum(){
+		$this->dbc->query( "VACUUM ".$this->table->getTableName() );
 	}
 }
 ?>
