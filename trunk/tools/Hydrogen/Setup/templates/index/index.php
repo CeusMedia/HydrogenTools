@@ -1,4 +1,10 @@
 <?php
+foreach( $modulesUpdate as $module ){
+	$attributes	= array( 'href' => './admin/module/viewer/index/'.$module->id );
+	$link		= UI_HTML_Tag::create( 'a', $module->title, $attributes );
+	$view->env->getMessenger()->noteNotice( 'Update: '.$link );
+}
+
 
 function countCores(){
 	exec( 'cat /proc/cpuinfo | grep processor | wc -l', $processors );

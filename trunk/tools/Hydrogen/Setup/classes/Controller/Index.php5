@@ -28,6 +28,12 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 		}
 		$this->env->clock->profiler->tick( 'Index::index: get more' );
 
+		$listModulesUpdate	= array();
+		foreach( $modulesInstalled as $module )
+			if( $module->versionInstalled && $module->versionAvailable )
+				if( version_compare( $module->versionAvailable, $module->versionInstalled ) > 0 )
+					$listModulesUpdate[]	= $module;
+
 		$model		= new Model_Instance( $this->env );
 
 		$this->addData( 'instances', $model->getAll() );
@@ -37,6 +43,7 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 		$this->addData( 'modulesInstalled', $modulesInstalled );
 		$this->addData( 'modulesMissing', $listModulesMissing );
 		$this->addData( 'modulesPossible', $listModulesPossible );
+		$this->addData( 'modulesUpdate', $listModulesUpdate );
 		$this->addData( 'remote', $remote );
 		$this->addData( 'remoteConfig', $remote->getConfig() );
 		$this->env->clock->profiler->tick( 'Index::index: done' );
