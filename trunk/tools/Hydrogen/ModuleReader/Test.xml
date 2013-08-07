@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<files>
+		<class>Controller/Test.php5</class>
+	</files>
+	<sql on="update" version-from="0.1" version-to="0.2" type="mysql">
+<![CDATA[
+--  NOTHING --
+		]]>		
+	</sql>
+</module>
