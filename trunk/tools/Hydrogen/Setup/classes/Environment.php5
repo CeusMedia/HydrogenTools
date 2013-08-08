@@ -84,6 +84,14 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$editor->setProperty( 'path', $this->uri, 'Setup' );
 			$this->restart();
 		}
+		$instances	= parse_ini_file( $fileName, TRUE );
+		$setup		= $instances['Setup'];
+		if( empty( $setup['path'] ) ){
+			$editor	= new File_INI_Editor( $fileName );
+			$editor->setProperty( 'path', dirname( getEnv( 'SCRIPT_NAME' ) ).'/', 'Setup' );
+			$editor->setProperty( 'uri', dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/', 'Setup' );
+			$this->restart();
+		}
 	}
 
 	protected function checkModules(){
@@ -121,10 +129,16 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					'resource'	=> 'tmp/cache/'
 				),
 			);
-			foreach( $modules as $moduleId => $settings ){
-				if( !$this->getModules()->has( $moduleId ) ){
+			$list	= array();
+			foreach( $modules as $moduleId => $settings )
+				if( !$this->getModules()->has( $moduleId ) )
+					$list[$moduleId]	= $settings;
+
+			if( $list){
+				foreach( $list as $moduleId => $settings){
+					$hint	= 'Installing module "'.$moduleId.'" ...';
 					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, $settings, TRUE );
-					$this->restart();
+					$this->restart( '<pre>'.$hint.'</pre>' );
 				}
 			}
 		}
@@ -144,6 +158,20 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$editor	= new File_INI_Editor( $fileName, TRUE );
 			$editor->setProperty( 'path', CMF_PATH.'modules/Hydrogen/', 'Local_CM_Public' );
 			$this->restart();
+		}
+		$sources	= parse_ini_file( $fileName, TRUE );
+		if( empty( $sources['Local_CM_Public']['path'] ) ){
+			$path	= dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/lib/cmFrameworks/modules/Hydrogen/';
+			if( file_exists( $path ) ){
+				$editor	= new File_INI_Editor( $fileName );
+				$editor->setProperty( 'path', $path, 'Local_CM_Public' );
+				$this->restart();
+			}
+			else
+			{
+				$uri	= $pathSelf.'config/modules/sources.ini';
+				throw new RuntimeException( 'Please configure path of source "Local_CM_Public" in '.$uri );
+			}
 		}
 	}
 
@@ -228,8 +256,18 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->clock->profiler->tick( 'env: remote' );
 	}
 
-	protected function restart(){
-		header( 'Location: ./' );
+	protected function restart( $output = NULL ){
+		if( !getEnv( 'HTTP_HOST' ) )
+			die( "Restart is not implemented for console applications by now. Sorry." );
+		if( !is_null( $output ) && strlen( $output ) ){
+			$page	= new UI_HTML_PageFrame();
+			$page->addBody( $output );
+			$page->addMetaTag( 'http-equiv', 'refresh', 0 );
+			print( $page->build() );
+			flush();
+		}
+		else
+			header( 'Location: ./' );
 		exit;
 	}
 }
