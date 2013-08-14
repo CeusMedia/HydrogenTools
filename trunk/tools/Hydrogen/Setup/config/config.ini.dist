@@ -1,5 +1,5 @@
 app.name			= "Setup"
-app.base.url		= "http://localhost/sandbox/Hydrogen/tools/Setup/"
+;app.base.url		= ""
 app.version			= "0.8"
 
 path.cache			= "tmp/cache/"
