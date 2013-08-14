@@ -15,9 +15,9 @@ $instanceId		= NULL;//'Setup';
 /*  --  RUN APPLICATION  --  */
 try{
 	require_once 'boot.php5';
-	Environment::$configFile	= "config/config.ini";
-	$env	= new Tool_Hydrogen_Setup_Environment( $instanceId );
-	$app	= new Tool_Hydrogen_Setup_App( $env );
+	Tool_Hydrogen_Setup_App::$classEnvironment		= "Tool_Hydrogen_Setup_Environment";
+	Tool_Hydrogen_Setup_Environment::$configFile	= "config/config.ini";
+	$app	= new Tool_Hydrogen_Setup_App();
 	$app->run();
 }
 catch( Exception $e ){
