@@ -1,3 +1,5 @@
+Options -MultiViews +FollowSymLinks
+
 <Files *.inc>
     Deny From All
 </Files>
