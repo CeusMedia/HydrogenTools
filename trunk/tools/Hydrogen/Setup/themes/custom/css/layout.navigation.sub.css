@@ -1,15 +1,11 @@
 /*  --  NAVIGATION  --  */
 #layout-navigation-sub {
-	display: block;
-	width: 100%;
-	max-width: 960px;
-	margin: 0px auto;
+	padding: 0;
 	}
 #layout-navigation-sub-inner {
-	width: 980px;
-	margin: 0 auto;
-	display: block;
 	height: 29px;
+	width: 80%;
+	padding: 0 0 0 20%;
 	}
 
 

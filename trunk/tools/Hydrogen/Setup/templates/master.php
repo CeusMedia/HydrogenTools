@@ -8,13 +8,13 @@ $sublinks	= array( 'admin/module' => $words['links_admin_module'] );
 $controller	= $env->request->get( 'controller' );
 $action		= $env->request->get( 'action' );
 
-$naviMain	= new CMF_Hydrogen_View_Helper_Navigation_SingleList( $links );
+$naviMain	= new CMF_Hydrogen_View_Helper_Navigation_SingleList( $links, NULL, 'layout-navigation-main-inner' );
 $naviMain	= $naviMain->render( $controller.'/'.$action, TRUE );
 
 $naviSub	= "";
 foreach( $sublinks as $path => $links ){
 	if( substr( $controller.'/', 0, strlen( $path ) ) == $path ){
-		$naviSub	= new CMF_Hydrogen_View_Helper_Navigation_SingleList( $links );
+		$naviSub	= new CMF_Hydrogen_View_Helper_Navigation_SingleList( $links, NULL, 'layout-navigation-sub-inner' );
 		$naviSub	= $naviSub->render( $controller, TRUE );
 	}
 }
@@ -58,37 +58,43 @@ $badges		= '<span>'.join( '</span><span>', $badges ).'</span>';
 
 $path		= $env->getRequest()->get( 'path' );
 $body		= '
-<div id="layout-navigation-top">
-	<div id="selector-instance">
-		<label for="input_instanceId">Instanz:</label>&nbsp;
-		<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
-	</div>
-</div>
-<div id="layout-header"></div>
-<div id="layout-navigation">
-	<div id="layout-navigation-main">
-		'.$naviMain.'
-	</div>
-</div>
-<div id="layout-navigation-sub">
-	'.$naviSub.'
-</div>
-<div id="layout-field">
-	<div id="layout-messenger">'.$messenger->buildMessages().'</div>
-	<div id="layout-content">'.$content.'</div>
-</div>
-<div id="layer-dev">
-	<xmp>'.$dev.'</xmp>
-</div>
-<div id="layout-footer">
-	<div id="layout-footer-inner">
-		<div id="footer-info">
-			'.$infos.'
+<div id="layout-page">
+	<div id="layout-navigation-top">
+		<div id="selector-instance">
+			<label for="input_instanceId">Instanz:</label>&nbsp;
+			<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
 		</div>
-		<div id="footer-badges">
-			'.$badges.'
+	</div>
+	<div id="layout-header"><h1>Hydra</h1></div>
+	<div id="layout-navigation">
+		<div id="layout-navigation-main">
+			'.$naviMain.'
 		</div>
-		<div style="clear: both"></div>
+	</div>
+	<div id="layout-navigation-sub">
+		'.$naviSub.'
+		<div style="clear: left"></div>
+	</div>
+	<div id="layout-field">
+		<div id="layout-messenger">'.$messenger->buildMessages().'</div>
+		<div id="layout-content">
+			'.$content.'
+			<div style="clear: both"></div>
+		</div>
+	</div>
+	<div id="layout-footer">
+		<div id="layout-footer-inner">
+			<div id="footer-info">
+				'.$infos.'
+			</div>
+			<div id="footer-badges">
+				'.$badges.'
+			</div>
+			<div style="clear: both"></div>
+			<div id="layer-dev">
+				<xmp>'.$dev.'</xmp>
+			</div>
+		</div>
 	</div>
 </div>';
 
@@ -97,7 +103,6 @@ $env->clock->profiler->tick( 'interface: master' );
 $pathJsLib		= $config->get( 'path.scripts.lib' );
 $pathCssLib		= $config->get( 'path.styles.lib' );
 
-$page->setTitle( $words['main']['title'] );
 $page->css->primer->addUrl( $pathCssLib.'xmp.formats.css' );
 $page->css->primer->addUrl( $pathCssLib.'layout.column.css' );
 $page->addPrimerStyle( 'layout.messenger.css' );
@@ -107,11 +112,12 @@ $page->addPrimerStyle( 'form.fieldset.css' );
 $page->addPrimerStyle( 'pagination.css' );
 $page->addPrimerStyle( 'layout.navigation.css' );
 $page->addPrimerStyle( 'layout.footer.css' );
+$page->addThemeStyle( 'layout.css' );
 $page->addThemeStyle( 'layout.navigation.sub.css' );
 $page->addThemeStyle( 'layout.footer.css' );
 $page->addThemeStyle( 'layer.css' );
 $page->addThemeStyle( 'table.css' );
 $page->addThemeStyle( 'style.css' );
 $page->addBody( $body );
-return $page->build();
+return $page->build( array( 'class' => 'colored' ) );
 ?>
