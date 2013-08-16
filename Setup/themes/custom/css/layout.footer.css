@@ -2,6 +2,12 @@
 /*	clear: left;
 	background-color: #F3F3F3;
 */	color: #999;
+	padding: 0;
+	background-color: transparent;
+	}
+#layout-footer-inner {
+	padding: 10px 20px 40px 20px;
+	border-radius: 0px 0px 1em 1em;
 	}
 #layout-footer #footer-info {
 	float: left;
