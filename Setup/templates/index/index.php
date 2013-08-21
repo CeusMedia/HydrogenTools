@@ -126,7 +126,8 @@ $listModulesPossible	= array();
 foreach( $modulesMissing as $moduleId ){
 	$label	= $moduleId;
 	if( array_key_exists( $moduleId, $modulesAll ) ){
-		$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
+		$desc	= explode( "\n", $module->description );
+		$desc	= trim( array_shift( $desc ) );
 		$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
 	}
 	$label	= '<span class="module">'.$label.'</span>';
@@ -136,7 +137,8 @@ foreach( $modulesMissing as $moduleId ){
 foreach( $modulesPossible as $moduleId ){
 	$label	= $moduleId;
 	if( array_key_exists( $moduleId, $modulesAll ) ){
-		$desc	= trim( array_shift( explode( "\n", $module->description ) ) );
+		$desc	= explode( "\n", $module->description );
+		$desc	= trim( array_shift( $desc ) );
 		$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
 	}
 	$label	= '<span class="module">'.$label.'</span>';

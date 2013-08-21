@@ -2,5 +2,5 @@
 title				= "Setup Tool itself"
 protocol			= "http://"
 host				= "localhost"
-path				= "Setup"
-uri					= "/var/www/Setup/"
+path				= "setup"
+uri					= "/var/www/setup/"
