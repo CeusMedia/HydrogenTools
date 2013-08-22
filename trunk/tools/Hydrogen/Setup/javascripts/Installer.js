@@ -40,8 +40,11 @@ var Installer = {
 				}
 				else{
 					$("#status").addClass("failed").html(Installer.labels.msgError);
-                                           var regExp = new RegExp( "<script.*?>([\w\W\d\D\s\S\0\n\f\r\t\v\b\B]*?)<\/script>", "gi");
-					response = response.replace(regExp, '');		//  @see http://stackoverflow.com/questions/7965111/prevent-jquery-ajax-to-execute-javascript-from-script-or-html-response
+
+					//  @see http://stackoverflow.com/questions/7965111/prevent-jquery-ajax-to-execute-javascript-from-script-or-html-response
+					var regExp = new RegExp( "<script.*?>([\w\W\d\D\s\S\0\n\f\r\t\v\b\B]*?)<\/script>", "gi");
+					response = response.replace(regExp, '');
+
 					preview.document.open("text/html","replace").write(response);
 					$("#response").show();
 				}

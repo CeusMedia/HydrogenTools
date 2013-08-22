@@ -43,3 +43,11 @@ table tr.odd td {
 table button {
 	font-size: 0.8em;
 	}
+
+table tr.error td {
+	background-color: #FFBFAF;
+	}
+
+table tr.success td {
+	background-color: #BFFFAF;
+	}
