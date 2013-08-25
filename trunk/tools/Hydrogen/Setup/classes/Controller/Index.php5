@@ -5,6 +5,13 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 	protected $env;
 
 	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){
+
+		if( $this->env->getRequest()->has( 'resetInstanceId' ) ){
+			$env->getSession()->remove( 'instanceId' );
+			$this->restart( NULL );
+		}
+		
+		
 		$instanceId		= $this->env->getSession()->get( 'instanceId' );
 
 		$model		= new Model_Instance( $this->env );
