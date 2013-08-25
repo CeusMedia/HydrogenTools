@@ -20,7 +20,7 @@ foreach( $sublinks as $path => $links ){
 }
 
 $model			= new Model_Instance( $env );
-$optInstance	= array();
+$optInstance	= array( '' => '-');
 foreach( $model->getAll() as $instance )
 	$optInstance[$instance->id]	= $instance->title;
 asort( $optInstance );
@@ -55,13 +55,14 @@ $badges[]	= '<a href="http://jigsaw.w3.org/css-validator/check/referer"><img sty
 $infos		= '<span>'.join( '</span><span>', $infos ).'</span>';
 $badges		= '<span>'.join( '</span><span>', $badges ).'</span>';
 
+$linkReset	= '<a href="./?resetInstanceId">Instanz</a>';
 
 $path		= $env->getRequest()->get( 'path' );
 $body		= '
 <div id="layout-page">
 	<div id="layout-navigation-top">
 		<div id="selector-instance">
-			<label for="input_instanceId">Instanz:</label>&nbsp;
+			<label for="input_instanceId">'.$linkReset.':</label>&nbsp;
 			<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
 		</div>
 	</div>
