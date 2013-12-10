@@ -26,7 +26,12 @@ table tr th.multiple {
 	border-bottom: 1px dotted #CCC;
 	}
 table tr td {
-	padding: 2px 4px 2px 4px;
+/*	padding: 2px 4px 2px 4px;*/
+/*	border-top: 1px solid rgba(127,127,127,0.25);*/
+	border-bottom: 1px solid rgba(127,127,127,0.25);
+	}
+table.striped tr:nth-child(2n) td{
+	background-color: #F3F3F3;
 	}
 table tr.even td {
 	background-color: #EEEEEE;
@@ -49,5 +54,5 @@ table tr.error td {
 	}
 
 table tr.success td {
-	background-color: #BFFFAF;
+	background-color: #9FFF8F;
 	}
