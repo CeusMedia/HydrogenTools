@@ -1,6 +1,0 @@
-[Setup]
-title				= "Setup Tool itself"
-protocol			= "http://"
-host				= "localhost"
-path				= "setup"
-uri					= "/var/www/setup/"
