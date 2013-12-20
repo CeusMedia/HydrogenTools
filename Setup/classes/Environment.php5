@@ -79,7 +79,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	protected function checkInstances(){
 		$fileName	= 'config/instances.json';
 		if( !file_exists( $fileName ) ){
-			File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
+			if( file_exists( 'config/instances.ini' ) ){
+				$json	= json_encode( parse_ini_file( 'config/instances.ini', TRUE ) );
+				File_Writer::save( $fileName, ADT_JSON_Formater::format( $json ) );
+//				@unlink( 'config/instances.ini' );
+			}
+			else
+				File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
 		}
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		$self	= $data['Hydra'];
@@ -163,7 +169,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	protected function checkSources(){
 		$fileName	= 'config/modules/sources.json';
 		if( !file_exists( $fileName ) ){
-			copy( $fileName.'.dist', $fileName );
+			if( file_exists( 'config/modules/sources.ini' ) ){
+				$json	= json_encode( parse_ini_file( 'config/modules/sources.ini', TRUE ) );
+				File_Writer::save( $fileName, ADT_JSON_Formater::format( $json ) );
+//				@unlink( 'config/modules/sources.ini' );
+			}
+			else
+				copy( $fileName.'.dist', $fileName );
 		}
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		if( empty( $data['Local_CM_Public']['path'] ) ){
