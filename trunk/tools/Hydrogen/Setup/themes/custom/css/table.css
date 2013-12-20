@@ -56,3 +56,7 @@ table tr.error td {
 table tr.success td {
 	background-color: #9FFF8F;
 	}
+
+table tr.notice td {
+	background-color: #FFFFCC;
+	}

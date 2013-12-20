@@ -99,17 +99,17 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$modelSource	= new Model_ModuleSource( $this );
 		$modelInstance	= new Model_Instance( $this );
 		$logic			= Logic_Module::getInstance( $this );
-/*		remark( "Sources:" );
-		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
-		remark( "Instances:" );
-		print_m( array_keys( $modelInstance->getAll( FALSE ) ) );
-		remark( "Categories:" );
-		print_m( $logic->getCategories() );
-		remark( "Modules installed:" );
-		print_m( array_keys( $logic->model->getInstalled() ) );
+#		remark( "Sources:" );
+#		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
+#		remark( "Instances:" );
+#		print_m( array_keys( $modelInstance->getAll( FALSE ) ) );
+#		remark( "Categories:" );
+#		print_m( $logic->getCategories() );
+#		remark( "Modules installed:" );
+#		print_m( array_keys( $logic->model->getInstalled() ) );
 
 #		$logic->uninstallModule( $moduleId );
-*/
+
 		try{
 			$modules	= array(
 				'Admin_Instances'			=> array(),
@@ -144,7 +144,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			}
 		}
 		catch( Exception_Logic $e ){
-			die( UI_HTML_Exception_Page::display( $e ) );
+			if( $e->getCode() == 2 ){
+				$messages	= array();
+				foreach( $e->getSubject() as $exception ){
+					$messages[]	= '<li>'.$exception->getMessage().": ".$exception->getResource().'</li>';
+				}
+				$this->messenger->noteFailure( $e->getMessage().":<br/><ul>".join( $messages ).'</ul>' );
+			}
 		}
 		catch( Exception $e ){
 			die( UI_HTML_Exception_Page::display( $e ) );
@@ -181,8 +187,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			$source	= CMF_PATH.'themes/Hydrogen/petrol';
 			$target	= $this->uri.'themes/petrol';
 			if( !file_exists( 'themes' ) )
-				if( !mkdir( 'themes', 0770 ) )
-					throw new RuntimeException( 'Could not create themes folder' );
+				Folder_Editor::createFolder( 'themes', 0770 );
 			if( !file_exists( 'themes/petrol' ) ){
 				if( !file_exists( $source ) )
 					throw new RuntimeException( 'Could not find Hydrogen theme "petrol" in '.$source );
