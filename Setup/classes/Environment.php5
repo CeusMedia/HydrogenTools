@@ -77,21 +77,20 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	}
 
 	protected function checkInstances(){
-		$fileName	= 'config/instances.ini';
+		$fileName	= 'config/instances.json';
 		if( !file_exists( $fileName ) ){
 			File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
-			$editor	= new File_INI_Editor( $fileName, TRUE );
-			$editor->setProperty( 'path', $this->uri, 'Setup' );
-			$this->restart();
 		}
-		$instances	= parse_ini_file( $fileName, TRUE );
-		$setup		= $instances['Setup'];
-		if( empty( $setup['path'] ) ){
-			$editor	= new File_INI_Editor( $fileName );
-			$editor->setProperty( 'path', dirname( getEnv( 'SCRIPT_NAME' ) ).'/', 'Setup' );
-			$editor->setProperty( 'uri', dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/', 'Setup' );
-			$this->restart();
-		}
+		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
+		$self	= $data['Hydra'];
+		if( !empty( $data['Hydra'] ) )
+			if( !empty( $data['Hydra']['path'] ) )
+				return;
+		$data['Hydra']['path']	= dirname( getEnv( 'SCRIPT_NAME' ) ).'/';
+		$data['Hydra']['uri']	= dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/';
+		$json	= ADT_JSON_Formater::format( json_encode( $data ) );
+		File_Writer::save( $fileName, $json );
+		$this->restart();
 	}
 
 	protected function checkModules(){
@@ -159,26 +158,15 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	}
 
 	protected function checkSources(){
-		$fileName	= 'config/modules/sources.ini';
+		$fileName	= 'config/modules/sources.json';
 		if( !file_exists( $fileName ) ){
 			copy( $fileName.'.dist', $fileName );
-			$editor	= new File_INI_Editor( $fileName, TRUE );
-			$editor->setProperty( 'path', CMF_PATH.'modules/Hydrogen/', 'Local_CM_Public' );
-			$this->restart();
 		}
-		$sources	= parse_ini_file( $fileName, TRUE );
-		if( empty( $sources['Local_CM_Public']['path'] ) ){
-			$path	= dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/lib/cmFrameworks/modules/Hydrogen/';
-			if( file_exists( $path ) ){
-				$editor	= new File_INI_Editor( $fileName );
-				$editor->setProperty( 'path', $path, 'Local_CM_Public' );
-				$this->restart();
-			}
-			else
-			{
-				$uri	= $pathSelf.'config/modules/sources.ini';
-				throw new RuntimeException( 'Please configure path of source "Local_CM_Public" in '.$uri );
-			}
+		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
+		if( empty( $data['Local_CM_Public']['path'] ) ){
+			$data['Local_CM_Public']['path']	= CMF_PATH.'modules/Hydrogen/';
+			$json	= ADT_JSON_Formater::format( json_encode( $data ) );
+			File_Writer::save( $fileName, $json );
 		}
 	}
 
@@ -212,20 +200,11 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			if( count( $instances ) == 1 )															//  only one instance is configured
 				$instance	= array_pop( $instances );												//  get this instance's environment
 			else if( $instances ){																	//  several instances are configured
-				$requestedId	= $this->request->get( 'selectInstanceId' );								//  
 				$sessionedId	= $this->session->get( 'instanceId' );								//  
 				if( $forceInstanceId ){																//  an instance is forced
 					if( !array_key_exists( $forceInstanceId, $instances ) )							//  but not configured
 						throw new InvalidArgumentException( 'Forced instance "'.$forceInstanceId.'" is not existing' );
 					$instance	=  $instances[$forceInstanceId];									//  get forced instance's environment
-				}
-				else if( $requestedId ){															//  an instance is requested
-					if( !array_key_exists( $requestedId, $instances ) )								//  but not configured
-						throw new InvalidArgumentException( 'Requested instance "'.$requestedId.'" is not existing' );
-					$this->session->set( 'instanceId', $requestedId );								//  store instance ID in session
-					$instance	=  $instances[$requestedId];										//  get forced instance's environment
-					if( $requestedId != $sessionedId )
-						$messenger->noteNotice( 'Instanz ausgewählt: <cite>'.$instance->title.'</cite>' );
 				}
 				else if( $sessionedId ){															//  an instance has been selected before
 					if( !array_key_exists( $sessionedId, $instances ) ){							//  but is not configured anymore
@@ -234,8 +213,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					}
 					$instance	= $instances[$sessionedId];											//  get instance environment
 				}
-				else
-					$instance	=  $instances[array_shift( array_keys( $instances ) )];
+#				else{
+#					$instance	=  $instances[array_shift( array_keys( $instances ) )];
+#				}
 			}
 			$pathApp		= $instance->uri;
 			$pathConfig		= !empty( $instance->configPath ) ? $instance->configPath : "config/";

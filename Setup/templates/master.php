@@ -21,8 +21,8 @@ foreach( $sublinks as $path => $links ){
 
 $model			= new Model_Instance( $env );
 $optInstance	= array( '' => '-');
-foreach( $model->getAll() as $instance )
-	$optInstance[$instance->id]	= $instance->title;
+foreach( $model->getAll() as $instanceId => $instance )
+	$optInstance[$instanceId]	= $instance->title;
 asort( $optInstance );
 $instanceId		= $env->getSession()->get( 'instanceId' );
 $optInstance	= UI_HTML_Elements::Options( $optInstance, $instanceId );
@@ -59,11 +59,19 @@ $linkReset	= '<a href="./?resetInstanceId">Instanz</a>';
 
 $path		= $env->getRequest()->get( 'path' );
 $body		= '
+<script>
+function selectInstanceId(id, forward){
+	var url = "./admin/instance/select/"+id;
+	if(forward)
+		url += "?forward="+forward;
+	document.location.href = url;
+}
+</script>
 <div id="layout-page">
 	<div id="layout-navigation-top">
 		<div id="selector-instance">
 			<label for="input_instanceId">'.$linkReset.':</label>&nbsp;
-			<select id="input_instanceId" name="instanceId" onchange="document.location.href=\'./'.$path.'?selectInstanceId=\'+$(this).val();">'.$optInstance.'</select>
+			<select id="input_instanceId" name="instanceId" onchange="selectInstanceId($(this).val(), \''.$path.'\');">'.$optInstance.'</select>
 		</div>
 	</div>
 	<div id="layout-header"><h1>Hydra</h1></div>
