@@ -146,7 +146,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			if( $e->getCode() == 2 ){
 				$messages	= array();
 				foreach( $e->getSubject() as $exception ){
-					$messages[]	= '<li>'.$exception->getMessage().": ".$exception->getResource().'</li>';
+					if( $exception instanceof Exception_IO )
+						$messages[]	= '<li>'.$exception->getMessage().': '.$exception->getResource().'</li>';
+					else
+						$messages[]	= '<li>'.$exception->getMessage().'</li>';
 				}
 				$this->messenger->noteFailure( $e->getMessage().":<br/><ul>".join( $messages ).'</ul>' );
 			}
