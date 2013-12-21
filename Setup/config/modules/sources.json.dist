@@ -1,6 +1,6 @@
 {
   "Local_CM_Public": {
-    "active": "yes",
+    "active": yes,
     "title": "Local copy of public module library maintained by Ceus Media",
     "type": "folder",
     "path": ""
