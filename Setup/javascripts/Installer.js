@@ -34,7 +34,7 @@ var Installer = {
 				if(response.match(/#greeting/)){
 					$("#status").addClass("failed").html(Installer.labels.msgErrorConfig);
 				}
-				else if(response.match(/.\/?selectInstanceId=/)){
+				else if(response.match(/.\/admin\/instance\/select/)){
 					$("#status").addClass("done").html(Installer.labels.msgDone);
 					document.location.reload();
 				}
