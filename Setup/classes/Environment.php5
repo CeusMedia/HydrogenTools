@@ -86,6 +86,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			}
 			else
 				File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
+			$this->restart();
 		}
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		$self	= $data['Hydra'];
@@ -176,7 +177,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			}
 			else
 				copy( $fileName.'.dist', $fileName );
+			$this->restart();
 		}
+
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		if( empty( $data['Local_CM_Public']['path'] ) ){
 			$data['Local_CM_Public']['path']	= CMF_PATH.'modules/Hydrogen/';
