@@ -123,7 +123,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 				'Admin_Module_Creator'		=> array(),
 				'UI_Helper_Content'			=> array(),
 				'UI_CSS_Reset'				=> array(),
-				'UI_DevLayers'				=> array(),		
+				'UI_DevLayers'				=> array(),
 				'UI_Indicator'				=> array(),
 				'JS_jQuery'					=> array(),
 				'JS_jQuery_UI'				=> array(),
@@ -133,6 +133,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			foreach( $modules as $moduleId => $settings )
 				if( !$this->getModules()->has( $moduleId ) )
 					$list[$moduleId]	= $settings;
+
+			$countAll	= count( $modules );
+			$countHave	= $countAll - count( $list );
 
 			if( $list){
 				foreach( $list as $moduleId => $settings){
