@@ -4,6 +4,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	/**	@var	CMF_Hydrogen_Environment_Remote	$remote		Instance of remote environment */
 	public $remote;
 
+	/**	@var	array							$words		List of main language topics */
+	public $words;
+
 	public function __construct( $forceInstanceId = NULL ){
 
 		self::$classRouter	= 'CMF_Hydrogen_Environment_Router_Recursive';
@@ -53,6 +56,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initPage();																			//  
 		$this->initAcl();																			//  
 		$this->initRemote( $forceInstanceId );														//  
+		$this->words	= $this->language->getWords( 'main' );
 		$this->__onInit();																			//  
 		$this->checkModules();																		//  try to install missing modules
 	}
@@ -62,6 +66,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			return;																					//  
 		if( !@copy( self::$configFile.'.dist', self::$configFile ) )									//  copy config file
 			die( "Missing write permissions for config folder." );
+		$this->messenger->noteNotice( $this->words['msg']['configInstalled'] );
 //		$editor	= new File_INI_Editor( self::$configFile );											//  
 //		$editor->setProperty( 'app.base.url', $this->url );											//  
 	}
@@ -89,9 +94,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	}
 
 	protected function checkModules(){
-		CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
-		$modelSource	= new Model_ModuleSource( $this );
-		$modelInstance	= new Model_Instance( $this );
+#		CMC_Loader::registerNew( 'php5', NULL, 'classes/' );
+#		$modelSource	= new Model_ModuleSource( $this );
+#		$modelInstance	= new Model_Instance( $this );
 		$logic			= Logic_Module::getInstance( $this );
 #		remark( "Sources:" );
 #		print_m( array_keys( $modelSource->getAll( FALSE ) ) );
@@ -101,8 +106,6 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 #		print_m( $logic->getCategories() );
 #		remark( "Modules installed:" );
 #		print_m( array_keys( $logic->model->getInstalled() ) );
-
-#		$logic->uninstallModule( $moduleId );
 
 		try{
 			$modules	= array(
@@ -134,11 +137,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 
 			if( $list){
 				foreach( $list as $moduleId => $settings){
-					$hint	= 'Installing module "'.$moduleId.'" ...';
-					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, $settings, TRUE );
-//					$this->restart( '<pre>'.$hint.'</pre>' );
+					$module		= $logic->getModule( $moduleId );
+					$type		= Logic_Module::INSTALL_TYPE_LINK;
+					$message	= $this->words['msg']['moduleAutoInstalled'];
+					$logic->installModule( $moduleId, $type, $settings, TRUE );
+					$this->messenger->noteNotice( $message, $module->title );
 				}
-				header( 'Location: '.$this->url );
+				header( 'Location: '.$this->url.$this->request->get( '__path' ) );
 				exit;
 			}
 		}
