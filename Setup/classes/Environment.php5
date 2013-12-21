@@ -53,6 +53,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initPage();																			//  
 		$this->initAcl();																			//  
 		$this->initRemote( $forceInstanceId );														//  
+		$this->__onInit();																			//  
 		$this->checkModules();																		//  try to install missing modules
 	}
 
