@@ -59,21 +59,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	protected function checkConfig(){
 		if( file_exists( self::$configFile ) )														//  config file is existing
 			return;																					//  
-		File_Writer::save( self::$configFile, File_Reader::load( self::$configFile.'.dist' ) );		//  copy config file
-		$editor	= new File_INI_Editor( self::$configFile );											//  
-		$editor->setProperty( 'app.base.url', $this->url );											//  
-		$script	= '<script>document.location.reload()</script>';									//  
-		$screen	= "#AppName# is installing. Please wait...".$script;								//  
-		$locale	= $editor->getProperty( 'locale.default' );
-		$file	= 'locales/'.$locale.'/html/env.installing.html';
-		if( file_exists( $file ) )																	//  
-			$screen	= File_Reader::load( $file );													//  
-		$screen	= str_replace( "#AppName#", $editor->getProperty( 'app.name' ), $screen );			//  insert application name from config
-		$screen	= str_replace( "#PathScripts#", $editor->getProperty( 'path.scripts' ), $screen );	//  insert path to scripts from config
-		$screen	= str_replace( "#PathImages#", $editor->getProperty( 'path.images' ), $screen );	//  insert path to images from config
-		$screen	= str_replace( "#Locale#", $locale, $screen );										//  insert locale key from config
-		print( $screen );
-		exit;
+		if( !@copy( self::$configFile.'.dist', self::$configFile ) )									//  copy config file
+			die( "Missing write permissions for config folder." );
+//		$editor	= new File_INI_Editor( self::$configFile );											//  
+//		$editor->setProperty( 'app.base.url', $this->url );											//  
 	}
 
 	protected function checkInstances(){
@@ -82,11 +71,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			if( file_exists( 'config/instances.ini' ) ){
 				$json	= json_encode( parse_ini_file( 'config/instances.ini', TRUE ) );
 				File_Writer::save( $fileName, ADT_JSON_Formater::format( $json ) );
-//				@unlink( 'config/instances.ini' );
+				@rename( 'config/instances.ini', 'config/instances.ini.old' );
 			}
 			else
 				File_Writer::save( $fileName, File_Reader::load( $fileName.'.dist' ) );
-			$this->restart();
 		}
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		$self	= $data['Hydra'];
@@ -97,7 +85,6 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$data['Hydra']['uri']	= dirname( getEnv( 'SCRIPT_FILENAME' ) ).'/';
 		$json	= ADT_JSON_Formater::format( json_encode( $data ) );
 		File_Writer::save( $fileName, $json );
-		$this->restart();
 	}
 
 	protected function checkModules(){
@@ -150,7 +137,8 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, $settings, TRUE );
 //					$this->restart( '<pre>'.$hint.'</pre>' );
 				}
-				$this->restart( '<pre>Installed.</pre>' );
+				header( 'Location: '.$this->url );
+				exit;
 			}
 		}
 		catch( Exception_Logic $e ){
@@ -177,13 +165,11 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			if( file_exists( 'config/modules/sources.ini' ) ){
 				$json	= json_encode( parse_ini_file( 'config/modules/sources.ini', TRUE ) );
 				File_Writer::save( $fileName, ADT_JSON_Formater::format( $json ) );
-//				@unlink( 'config/modules/sources.ini' );
+				@rename( 'config/modules/sources.ini', 'config/modules/sources.ini.old' );
 			}
 			else
 				copy( $fileName.'.dist', $fileName );
-			$this->restart();
 		}
-
 		$data	= json_decode( File_Reader::load( $fileName ), TRUE );
 		if( empty( $data['Local_CM_Public']['path'] ) ){
 			$data['Local_CM_Public']['path']	= CMF_PATH.'modules/Hydrogen/';
