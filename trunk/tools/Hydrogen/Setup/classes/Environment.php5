@@ -148,8 +148,9 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 				foreach( $list as $moduleId => $settings){
 					$hint	= 'Installing module "'.$moduleId.'" ...';
 					$logic->installModule( $moduleId, Logic_Module::INSTALL_TYPE_LINK, $settings, TRUE );
-					$this->restart( '<pre>'.$hint.'</pre>' );
+//					$this->restart( '<pre>'.$hint.'</pre>' );
 				}
+				$this->restart( '<pre>Installed.</pre>' );
 			}
 		}
 		catch( Exception_Logic $e ){
