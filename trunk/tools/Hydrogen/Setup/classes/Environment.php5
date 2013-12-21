@@ -118,6 +118,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 
 		try{
 			$modules	= array(
+				'Resource_Library_cmModules'	=> array(
+					'path'	=> CMF_PATH,
+				),
+				'Resource_Cache'			=> array(
+					'type'		=> 'Folder',
+					'resource'	=> 'tmp/cache/'
+				),
 				'Admin_Instances'			=> array(),
 				'Admin_Modules'				=> array(),
 				'Admin_Module_Sources'		=> array(),
@@ -131,10 +138,6 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 				'JS_jQuery'					=> array(),
 				'JS_jQuery_UI'				=> array(),
 				'JS_Layer'					=> array(),
-				'Resource_Cache'			=> array(
-					'type'		=> 'Folder',
-					'resource'	=> 'tmp/cache/'
-				),
 			);
 			$list	= array();
 			foreach( $modules as $moduleId => $settings )
