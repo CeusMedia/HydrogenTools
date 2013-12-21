@@ -66,7 +66,6 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			return;																					//  
 		if( !@copy( self::$configFile.'.dist', self::$configFile ) )									//  copy config file
 			die( "Missing write permissions for config folder." );
-		$this->messenger->noteNotice( $this->words['msg']['configInstalled'] );
 //		$editor	= new File_INI_Editor( self::$configFile );											//  
 //		$editor->setProperty( 'app.base.url', $this->url );											//  
 	}
