@@ -3,7 +3,7 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 
 	/**	@var	Tool_Hydrogen_Setup_Environment		$env		Environment object */
 	protected $env;
-
+	
 	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){
 
 		if( $this->env->getRequest()->has( 'resetInstanceId' ) ){
@@ -19,9 +19,6 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 
 		if( $instanceId ){
 			$remote			= $this->env->getRemote();
-			$this->env->clock->profiler->tick( 'Index::index: init remote' );
-#			print_m( $remote );
-#			die;
 			$logic			= Logic_Module::getInstance( $this->env );
 			$this->env->clock->profiler->tick( 'Index::index: init' );
 
@@ -72,6 +69,71 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 		}
 		
 		$this->env->clock->profiler->tick( 'Index::index: done' );
+	}
+
+	public function showInstanceModuleGraph( $instanceId = NULL, $showExceptions = NULL ){
+		try{
+			if( !UI_Image_Graphviz_Renderer::checkGraphvizSupport() )
+				throw new InvalidArgumentException( "No GraphViz support detected" );
+
+			$instanceId		= $this->env->getSession()->get( 'instanceId' );
+			if( !$instanceId )
+				throw new InvalidArgumentException( "No instance selected" );
+
+/*	--  SADLY this code breaks for some instances on creation of remove environment, so no support for requested instances :-(
+			if( $instanceId ){
+				$model		= new Model_Instance( $this->env );
+				$instance	= $model->get( $instanceId );
+				if( !$instance )
+					throw new InvalidArgumentException( "Invalid instance ID" );
+				$pathConfig	= !empty( $instance->pathConfig ) ? $instance->pathConfig : 'config/';
+				$fileConfig	= !empty( $instance->pathFile ) ? $instance->pathFile : 'config.ini';
+				if( !file_exists( $instance->uri.$pathConfig.$fileConfig ) )
+					throw new RuntimeException( 'Instance config file missing' );
+				$options	= array(
+					'configFile'	=> $instance->uri.$pathConfig.$fileConfig,
+					'pathApp'		=> $instance->uri
+				);
+				try{
+					$remote		= new CMF_Hydrogen_Environment_Remote( $options );
+					$modules	= $remote->getModules()->getAll();
+				}
+				catch( Exception $e ){
+					UI_HTML_Exception_Page::display( $e );
+					exit;
+				}
+			}
+			else
+				$modules	= $this->env->remote->getModules()->getAll();
+*/
+			if( !$this->env->remote->getModules() )
+				throw new RuntimeException( 'Instance has no modules' );
+			$modules	= $this->env->remote->getModules()->getAll();
+			ksort( $modules );
+
+			$nodeOptions	= array( 'shape' => 'oval', 'style' => 'filled, rounded', 'fontsize' => 10, 'fillcolor' => 'gray90', 'color' => "white" );
+			$edgeOptions1	= array( 'arrowsize' => 0.5, 'fontsize' => 8, 'fontcolor' => 'gray50', 'color' => 'gray25' );
+			$edgeOptions2	= array( 'arrowsize' => 0.5, 'fontsize' => 8, 'fontcolor' => 'gray75', 'color' => 'gray50', 'style' => 'dashed' );
+
+			$graph		= new UI_Image_Graphviz_Graph( $instanceId, array( 'rankdir' => 'LR' ) );
+			foreach( $modules as $module )
+				$graph->addNode( $module->id, array( 'label' => $module->title ) + $nodeOptions );
+			foreach( $modules as $module ){
+				foreach( $module->relations->needs as $related )
+					$graph->addEdge( $module->id, $related, array( 'label' => 'needs' ) + $edgeOptions1 );
+				foreach( $module->relations->supports as $related )
+					if( array_key_exists( $related, $modules ) )
+						$graph->addEdge( $module->id, $related, array( 'label' => 'supports' ) + $edgeOptions2 );
+			}
+			$renderer	= new UI_Image_Graphviz_Renderer( $graph );
+			$renderer->printGraph( "svg" );
+		}
+		catch( Exception $e ){
+			if( $showExceptions )
+				UI_HTML_Exception_Page::display( $e );
+			new UI_Image_Error( $e->getMessage() );
+		}
+		exit;
 	}
 }
 ?>

@@ -74,8 +74,14 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$fileName	= 'config/instances.json';
 		if( !file_exists( $fileName ) ){
 			if( file_exists( 'config/instances.ini' ) ){
-				$json	= json_encode( parse_ini_file( 'config/instances.ini', TRUE ) );
-				File_Writer::save( $fileName, ADT_JSON_Formater::format( $json ) );
+				$data	= parse_ini_file( 'config/instances.ini', TRUE );
+				$data['Hydra']	= $data['Setup'];
+				$data['Hydra']['uri']	= $this->uri;
+				$data['Hydra']['path']	= $this->path;
+				$data['Hydra']['host']	= $this->host;
+				$data['Hydra']['protocol']	= $this->scheme.'://';
+				unset( $data['Setup'] );
+				File_Writer::save( $fileName, ADT_JSON_Formater::format( json_encode( $data ) ) );
 				@rename( 'config/instances.ini', 'config/instances.ini.old' );
 			}
 			else

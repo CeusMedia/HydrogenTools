@@ -80,10 +80,11 @@ if( $instanceId )
 --></fieldset>';
 
 	$panelInfo	= $view->loadTemplate( 'index', 'index.info' );
-	
+
 	return '
 <script>
 $(document).ready(function(){
+	$(".index-config-module a").bind("click",function(event){event.stopPropagation();});
 	$(".index-config-module").bind("click",function(){$(this).next().slideToggle();});
 });
 </script>
@@ -107,6 +108,14 @@ $(document).ready(function(){
 		<div class="column-clear"></div>
 	</div>
 	<div class="column-clear"></div>
+	<fieldset>
+		<legend>Graph der Module der Instanz</legend>
+		<div style="overflow: auto; width: 100%">
+			<a href="./index/showInstanceModuleGraph/'.$instanceId.'">
+				<img src="./index/showInstanceModuleGraph/'.$instanceId.'" type="image/svg+xml" />
+			</a>
+		</div>
+	</fieldset>
 </div>
 ';
 }
@@ -120,6 +129,7 @@ else{
 	<div class="column-right-33">
 		'.$panelSystem.'
 	</div>
+	<div class="column-clear"></div>
 </div>
 ';
 }
