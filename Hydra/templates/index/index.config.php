@@ -1,7 +1,7 @@
 <?php
 if( empty( $remoteConfig ) )
 	return "";
-$l	= array();
+$listModules	= array();
 foreach( $modulesInstalled as $module ){
 	$list	= array();
 	foreach( $module->config as $item ){
@@ -24,17 +24,25 @@ foreach( $modulesInstalled as $module ){
 		$list[$item->key]	= '<dt>'.$item->key.'</dt><dd>'.$value.'</dd>';
 	}
 	natcasesort( $list );
-	if( $list )
-		$l[]	= '<h4 class="index-config-module">'.$module->title.'</h4><dl class="index-config">'.join( $list ).'</dl>';
+	if( $list ){
+		$url		= './admin/module/editor/index/'.$module->id;
+		$button		= UI_HTML_Elements::LinkButton( $url, '', 'button tiny edit' );
+		$button		= UI_HTML_Tag::create( 'div', $button, array( 'style' => "position: absolute; right: 3px; top: 1px;" ) );
+		$list		= UI_HTML_Tag::create( 'dl', $list, array( 'class' => 'index-config' ) );
+		$url		= './admin/module/viewer/index/'.$module->id;
+		$link		= UI_HTML_Tag::create( 'a', $module->title, array( 'href' => $url, 'class' => 'module' ) );
+		$heading	= UI_HTML_Tag::create( 'h4', $link/*.$button*/, array( 'class' => 'index-config-module' ) );
+		$listModules[]	= $heading.$list;
+	}
 }
-if( empty( $l ) )
+if( empty( $listModules ) )
 	return "";
 
 return '
 <fieldset>
 	<legend class="info">Konfiguration</legend>
 	<div style="max-height: 320px; overflow: auto;">
-		'.join( $l ).'
+		'.join( $listModules ).'
 	</div>
 </fieldset>';
 ?>
