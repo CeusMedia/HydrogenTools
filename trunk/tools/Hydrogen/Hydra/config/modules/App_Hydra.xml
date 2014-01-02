@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<module>
+	<title>Hydra AppManager</title>
+	<description><![CDATA[Administration Tool for Hydrogen Instances and Modules.
+
+]]></description>
+	<category>Application</category>
+	<version>0.8.2</version>
+	<company site="http://ceusmedia.de/">Ceus Media</company>
+	<author email="christian.wuerker@ceusmedia.de">Christian W&#xFC;rker</author>
+	<license source="http://www.gnu.org/licenses/gpl-3.0.txt">GPL 3</license>
+	<files>
+	</files>
+	<relations>
+		<needs type="module">Admin_Modules</needs>
+		<needs type="module">Admin_Module_Installer</needs>
+		<needs type="module">Admin_Module_Editor</needs>
+		<needs type="module">Admin_Module_Creator</needs>
+		<needs type="module">Admin_Module_Sources</needs>
+		<needs type="module">Admin_Instances</needs>
+		<needs type="module">Resource_Cache</needs>
+		<needs type="module">JS_jQuery_UI</needs>
+		<needs type="module">JS_Layer</needs>
+		<needs type="module">UI_Indicator</needs>
+		<supports type="module">UI_DevLayers_Profiler</supports>
+	</relations>
+</module>

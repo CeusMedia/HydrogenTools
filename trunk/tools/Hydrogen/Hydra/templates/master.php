@@ -57,7 +57,7 @@ $badges		= '<span>'.join( '</span><span>', $badges ).'</span>';
 
 $linkReset	= '<a href="./?resetInstanceId">Instanz</a>';
 
-$path		= $env->getRequest()->get( 'path' );
+$path		= $env->getRequest()->get( '__path' );
 $body		= '
 <script>
 function selectInstanceId(id, forward){
@@ -127,6 +127,7 @@ $page->addThemeStyle( 'layout.footer.css' );
 $page->addThemeStyle( 'layer.css' );
 $page->addThemeStyle( 'table.css' );
 $page->addThemeStyle( 'style.css' );
+$page->addThemeStyle( 'font.css' );
 $page->addBody( $body );
 return $page->build( array( 'class' => 'colored' ) );
 ?>
