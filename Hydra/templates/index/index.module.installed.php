@@ -5,7 +5,7 @@ foreach( $modulesInstalled as $moduleId => $module ){
 	$desc	= trim( array_shift( $desc ) );
 	$label	= $desc ? '<acronym title="'.$desc.'">'.$module->title.'</acronym>' : $module->title;
 	$label	= '<span class="module">'.$label.'</span>';
-	$link	= '<a href="./admin/module/editor/view/'.$moduleId.'">'.$label.'</a>';
+	$link	= '<a href="./admin/module/viewer/view/'.$moduleId.'">'.$label.'</a>';
 	$listModulesInstalled[$module->title]	= '<li>'.$link.'</li>';	
 }
 natcasesort( $listModulesInstalled );
