@@ -112,7 +112,7 @@ $(document).ready(function(){
 		<legend>Graph der Module der Instanz</legend>
 		<div style="overflow: auto; width: 100%">
 			<a href="./index/showInstanceModuleGraph/'.$instanceId.'">
-				<img src="./index/showInstanceModuleGraph/'.$instanceId.'" type="image/svg+xml" />
+				<img style="max-width: 100%" src="./index/showInstanceModuleGraph/'.$instanceId.'" type="image/svg+xml" />
 			</a>
 		</div>
 	</fieldset>
