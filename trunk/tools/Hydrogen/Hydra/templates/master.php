@@ -124,6 +124,7 @@ $page->addPrimerStyle( 'layout.footer.css' );
 $page->addThemeStyle( 'layout.css' );
 $page->addThemeStyle( 'layout.navigation.sub.css' );
 $page->addThemeStyle( 'layout.footer.css' );
+$page->addThemeStyle( 'form.fieldset.css' );
 $page->addThemeStyle( 'layer.css' );
 $page->addThemeStyle( 'table.css' );
 $page->addThemeStyle( 'style.css' );

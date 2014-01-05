@@ -1,110 +1,24 @@
 
 /*  --  FIELDSET  --  */
 fieldset {
-/*	position: static;*/
-	margin-bottom: 2em;
-	padding: 1em 1em 1em 1em;
-	border: 2px solid rgba(0,0,0,0.25);
-	border-radius: 0.5em;
-	-moz-border-radius: 0.5em;
-	-wekbit-border-radius: 0.5em;
-	-khtml-border-radius: 0.5em;
-	background-color: rgba(255,255,255,0.5);
+	border: 2px solid rgba(0,0,0,0.33);
+	background-color: rgb(247,247,247);
+	background-color: rgb(255,255,255);
+	box-shadow: 2px 2px 6px 1px rgba(127,127,127,0.2);
 	}
 
 fieldset legend {
-/*	position: relative;
-	top: -0.96em;*/
-	padding: 0.4em 1.5em 0em 1.5em;
-	font-size: 1.1em;
-	text-shadow: #BBB 1px 1px 1px;
-	border-width: 2px 2px 0px 2px;
-	border-style: solid;
-	border-color: rgba(0,0,0,0.25);
-	background-color: rgba(255,255,255,0.5);
-	border-top-left-radius: 0.4em;
-	border-top-right-radius: 0.4em;
-	-moz-border-radius-topleft: 0.4em;
-	-moz-border-radius-topright: 0.4em;
-	}
-
-/*  FIELDSET: LIST  */
-fieldset ul.list {
-	list-style-type: none;
-	margin: 0px;
-	padding: 0px;
-	}
-fieldset ul.list li {
-	clear: both;
-	margin-bottom: 0.3em;
-	}
-fieldset ul.list li:last-child {
+/*	text-shadow: #BBB 1px 1px 1px;*/
+	border-color: rgba(0,0,0,0.33);
+	background-color: rgb(247,247,247);
+	background-color: rgb(255,255,255);
+	padding-top: 0.3em;
+	padding-left: 32px;
+	font-size: 14px;
 	}
 
 
 /*  FIELDSET: INPUT LIST  */
-fieldset ul.input {
-	list-style-type: none;
-	margin: 0px;
-	}
-
 fieldset ul.input li {
-	padding-bottom: 1.5em;
-	}
-fieldset ul.input li:last-child {
-	padding-bottom: 0.2em;
-	}
-
-legend.auth,
-legend.edit,
-legend.messages,
-legend.messages-new,
-legend.roles,
-legend.rooms,
-legend.users,
-legend.users-new,
-legend.filter,
-legend.info,
-legend.lock,
-legend.reports {
-	background-repeat: no-repeat;
-	background-position: 7px 7px;
-	padding-left: 28px;
-	}
-
-legend.auth {
-	background-image: url(/lib/cmIcons/famfamfam/silk/lock.png);
-	}
-legend.edit {
-	background-image: url(/lib/cmIcons/famfamfam/silk/pencil.png);
-	}
-legend.messages {
-	background-image: url(/lib/cmIcons/famfamfam/silk/comment.png);
-	}
-legend.messages-new {
-	background-image: url(/lib/cmIcons/famfamfam/silk/comment_add.png);
-	}
-legend.roles {
-	background-image: url(/lib/cmIcons/famfamfam/silk/group.png);
-	}
-legend.rooms {
-	background-image: url(/lib/cmIcons/famfamfam/silk/door.png);
-	}
-legend.users {
-	background-image: url(/lib/cmIcons/famfamfam/silk/user.png);
-	}
-legend.users-new {
-	background-image: url(/lib/cmIcons/famfamfam/silk/user_add.png);
-	}
-legend.filter {
-	background-image: url(/lib/cmIcons/famfamfam/silk/magnifier.png);
-	}
-legend.reports {
-	background-image: url(/lib/cmIcons/famfamfam/silk/chart_bar.png);
-	}
-legend.info {
-	background-image: url(/lib/cmIcons/famfamfam/silk/information.png);
-	}
-legend.lock {
-	background-image: url(/lib/cmIcons/famfamfam/silk/lock.png);
+	padding-bottom: 0.5em;
 	}
