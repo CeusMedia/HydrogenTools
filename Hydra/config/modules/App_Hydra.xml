@@ -5,7 +5,7 @@
 
 ]]></description>
 	<category>Application</category>
-	<version>0.8.2</version>
+	<version>0.8.3</version>
 	<company site="http://ceusmedia.de/">Ceus Media</company>
 	<author email="christian.wuerker@ceusmedia.de">Christian W&#xFC;rker</author>
 	<license source="http://www.gnu.org/licenses/gpl-3.0.txt">GPL 3</license>
@@ -22,6 +22,7 @@
 		<needs type="module">JS_jQuery_UI</needs>
 		<needs type="module">JS_Layer</needs>
 		<needs type="module">UI_Indicator</needs>
+		<needs type="module">UI_CSS_Reset</needs>
 		<supports type="module">UI_DevLayers_Profiler</supports>
 	</relations>
 </module>
