@@ -148,7 +148,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 					$module		= $logic->getModule( $moduleId );
 					$type		= Logic_Module::INSTALL_TYPE_LINK;
 					$message	= $this->words['msg']['moduleAutoInstalled'];
-					$logic->installModule( $moduleId, $type, $settings, TRUE );
+					$logic->installModule( $module->source, $moduleId, $type, $settings, TRUE );
 					$this->messenger->noteNotice( $message, $module->title );
 				}
 				header( 'Location: '.$this->url.$this->request->get( '__path' ) );

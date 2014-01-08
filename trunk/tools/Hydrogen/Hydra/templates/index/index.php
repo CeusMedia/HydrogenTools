@@ -3,10 +3,9 @@
 $panelList		= $view->loadTemplate( 'index', 'index.instances' );
 $panelSystem	= $view->loadTemplate( 'index', 'index.system' );
 
-
 if( $instanceId )
 {
-	$panelConfig			= $view->loadTemplate( 'index', 'index.config' );
+	$panelConfig			= $view->loadTemplate( 'index', 'index.config' );						//  @todo test
 	$panelModulesUpdatable	= $view->loadTemplate( 'index', 'index.module.updates' );
 	$panelModulesInstalled	= $view->loadTemplate( 'index', 'index.module.installed' );
 
