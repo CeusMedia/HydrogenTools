@@ -4,8 +4,7 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 	/**	@var	Tool_Hydrogen_Setup_Environment		$env		Environment object */
 	protected $env;
 	
-	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){
-
+	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){		
 		if( $this->env->getRequest()->has( 'resetInstanceId' ) ){
 			$env->getSession()->remove( 'instanceId' );
 			$this->restart( NULL );
@@ -69,6 +68,16 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 		}
 		
 		$this->env->clock->profiler->tick( 'Index::index: done' );
+	}
+
+	public function showTodos(){
+		$index	= new File_RecursiveTodoLister( array( 'php', 'js' ) );
+		$index->scan( $this->env->getRemote()->path );
+		$this->addData( 'path', $this->env->getRemote()->path );
+		$this->addData( 'todos', $index->getList( TRUE ) );
+		$this->env->getMessenger()->noteNotice( 'Scanned path "'.$this->env->getRemote()->path.'" for todos.' );
+		$this->env->getMessenger()->noteNotice( $index->getNumberScanned().' Files scanned.' );
+		$this->env->getMessenger()->noteNotice( $index->getNumberTodos().' Files found.' );
 	}
 
 	public function showInstanceModuleGraph( $instanceId = NULL, $showExceptions = NULL ){
