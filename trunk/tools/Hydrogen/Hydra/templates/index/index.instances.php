@@ -8,7 +8,12 @@ foreach( $instances as $id => $entry ){
 	$class		= $instanceId === $id ? array( 'active' ) : array();
 	$class[]	= file_exists( $configFile ) ? 'check-okay' : 'check-fail';
 	$url		= './admin/instance/select/'.$id;
-	$link		= UI_HTML_Elements::Link( $url, $entry->title, 'instance' );
+	$attributes	= array(
+		'href'				=> $url,
+		'class'				=> 'instance',
+		'data-instance-id'	=> $id,
+	);
+	$link		= UI_HTML_Tag::create( 'a', $entry->title, $attributes );
 	$attributes	= array(
 		'class'		=> join( ' ', $class ),
 		'data-url'	=> $entry->protocol.$entry->host.$entry->path
@@ -27,5 +32,31 @@ return '
 		'.UI_HTML_Elements::LinkButton( './admin/instance/', '', 'button tiny edit' ).'
 	</div>
 	'.$list.'
-</fieldset>';
+</fieldset>
+<script>
+function checkForUpdates(){
+	$("ul.instances li.check-okay").each(function(){
+		var instanceId = $(this).children("a").data("instanceId");
+		$.ajax({
+			url: "./index/ajaxListModuleUpdates/?forceInstanceId="+instanceId,
+			dataType: "json",
+			context: $(this),
+			success: function(json){
+				if(json.missing.length)
+					$(this).addClass("check-modules-missing");
+				else if(json.updatable.length)
+					$(this).addClass("check-modules-updatable");
+//				console.log(json);
+			},
+			error: function(a){
+//				console.log(a);
+			}
+		});
+	});
+}
+$(document).ready(function(){
+	checkForUpdates();
+});
+</script>
+';
 ?>
