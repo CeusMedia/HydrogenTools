@@ -55,7 +55,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		$this->initLanguage();																		//  setup language support
 		$this->initPage();																			//  
 		$this->initAcl();																			//  
-		$this->initRemote( $forceInstanceId );														//  
+		$this->initRemote( $this->request->get( 'forceInstanceId' ) );														//  
 		$this->words	= $this->language->getWords( 'main' );
 		$this->__onInit();																			//  
 		$this->checkModules();																		//  try to install missing modules
