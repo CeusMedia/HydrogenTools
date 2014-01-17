@@ -22,7 +22,7 @@ body.colored {
 #layout-page {
 	position: relative;
 	max-width: 1240px;
-	min-width: 980px;
+	min-width: 440px;
 	height: auto;
 	margin: 0em auto;
 	padding: 0em;
@@ -273,4 +273,50 @@ div.index .muted {
 	font-weight: lighter;
 	color: #777;
 	}
+
+
+
+/*  RESPONSIVE LAYOUT  */
+
+/* breite Browserfenster */
+@media (min-width: 950px) {
+}
+/* Darstellung auf Netbooks */
+@media (min-width: 450px) and (max-width: 940px) {
+	.column-left-90,
+	.column-left-80,
+	.column-left-75,
+	.column-left-70,
+	.column-left-66,
+	.column-left-60,
+	.column-left-50,
+	.column-left-40,
+	.column-left-33,
+	.column-left-30,
+	.column-left-25,
+	.column-left-20,
+	.column-left-10,
+	.column-right-90,
+	.column-right-80,
+	.column-right-75,
+	.column-right-70,
+	.column-right-66,
+	.column-right-60,
+	.column-right-50,
+	.column-right-40,
+	.column-right-33,
+	.column-right-30,
+	.column-right-25,
+	.column-right-20,
+	.column-right-10 {
+		float: none;
+		display: block;
+		width: 100%;
+		margin: 0;
+	}
+}
+/* mobile Geräte */
+@media (max-width: 450px) {
+}
+
 
