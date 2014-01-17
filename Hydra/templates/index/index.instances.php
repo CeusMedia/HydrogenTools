@@ -37,24 +37,33 @@ return '
 function checkForUpdates(){
 	$("ul.instances li.check-okay").each(function(){
 		var instanceId = $(this).children("a").data("instanceId");
-		$.ajax({
-			url: "./index/ajaxListModuleUpdates/?forceInstanceId="+instanceId,
-			dataType: "json",
-			context: $(this),
-			success: function(json){
-				if(json.missing.length)
-					$(this).addClass("check-modules-missing");
-				else if(json.updatable.length)
-					$(this).addClass("check-modules-updatable");
-//				console.log(json);
+		Instance.isReachable($(this).data("url"), $(this), {
+			success: function(){
+				$.ajax({
+					url: "./index/ajaxListModuleUpdates/?forceInstanceId="+instanceId,
+					dataType: "json",
+					context: $(this),
+					success: function(json){
+						if(json.missing.length)
+							$(this).addClass("check-modules-missing");
+						else if(json.updatable.length)
+							$(this).addClass("check-modules-updatable");
+					},
+					error: function(xhr, status){
+		//				console.log(status);
+		//				console.log(xhr);
+					}
+				});
 			},
-			error: function(a){
-//				console.log(a);
+			error: function(){
+				console.log("Error: "+instanceId);
+				$(this).removeClass("check-okay").addClass("check-fail");
 			}
 		});
 	});
 }
 $(document).ready(function(){
+	
 	checkForUpdates();
 });
 </script>
