@@ -6,7 +6,9 @@
 	background-color: transparent;
 	}
 #layout-footer-inner {
-	padding: 10px 20px 40px 20px;
+	width: 90%;
+	margin: 0;
+	padding: 15px 5% 30px 5%;
 	border-radius: 0px 0px 1em 1em;
 	}
 #layout-footer #footer-info {
@@ -14,7 +16,7 @@
 	}
 #layout-footer #footer-badges {
 	float: right;
-	margin-right: 1%;
+/*	margin-right: 1%;*/
 	}
 #layout-footer #footer-info span {
 	float: left;
@@ -30,8 +32,9 @@
 	border-right: none;
 	}
 	
-#layout-footer #footer-badges {
+/*#layout-footer #footer-badges {
 	position: absolute;
 	right: 1em;
 	top: 1em;
-	}
+	}*/
+
