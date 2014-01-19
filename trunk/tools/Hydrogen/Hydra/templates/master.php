@@ -8,6 +8,9 @@ $sublinks	= array( 'admin/module' => $words['links_admin_module'] );
 $controller	= $env->request->get( 'controller' );
 $action		= $env->request->get( 'action' );
 
+if( $controller == "admin/module/source" )
+	$sublinks	= array();
+
 $naviMain	= new CMF_Hydrogen_View_Helper_Navigation_SingleList( $links, NULL, 'layout-navigation-main-inner' );
 $naviMain	= $naviMain->render( $controller.'/'.$action, TRUE );
 

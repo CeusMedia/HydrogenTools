@@ -283,6 +283,9 @@ div.index .muted {
 }
 /* Darstellung auf Netbooks */
 @media (min-width: 450px) and (max-width: 940px) {
+}
+/* mobile Geräte */
+@media (max-width: 700px) {
 	.column-left-90,
 	.column-left-80,
 	.column-left-75,
@@ -314,9 +317,6 @@ div.index .muted {
 		width: 100%;
 		margin: 0;
 	}
-}
-/* mobile Geräte */
-@media (max-width: 450px) {
 }
 
 
