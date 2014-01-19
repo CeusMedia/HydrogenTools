@@ -9,7 +9,7 @@ if( $instanceId )
 	$panelConfig			= $view->loadTemplate( 'index', 'index.config' );						//  @todo test
 	$panelModulesUpdatable	= $view->loadTemplate( 'index', 'index.module.updates' );
 	$panelModulesInstalled	= $view->loadTemplate( 'index', 'index.module.installed' );
-
+	
 	/*  --  LIST: MODULES INSTALLED  --  */
 	
 	/*  --  LIST: MODULES MISSING  --  */
@@ -81,6 +81,18 @@ if( $instanceId )
 
 	$panelInfo	= $view->loadTemplate( 'index', 'index.info' );
 
+	$panelGraph	= '';
+	if( $modulesInstalled )
+		$panelGraph	= ';
+	<fieldset>
+		<legend>Graph der Module der Instanz</legend>
+		<div style="overflow: auto; width: 100%">
+			<a href="./index/showInstanceModuleGraph/'.$instanceId.'">
+				<img style="max-width: 100%" src="./index/showInstanceModuleGraph/'.$instanceId.'" type="image/svg+xml" />
+			</a>
+		</div>
+	</fieldset>';
+	
 	return '
 <script>
 $(document).ready(function(){
@@ -108,14 +120,7 @@ $(document).ready(function(){
 		<div class="column-clear"></div>
 	</div>
 	<div class="column-clear"></div>
-	<fieldset>
-		<legend>Graph der Module der Instanz</legend>
-		<div style="overflow: auto; width: 100%">
-			<a href="./index/showInstanceModuleGraph/'.$instanceId.'">
-				<img style="max-width: 100%" src="./index/showInstanceModuleGraph/'.$instanceId.'" type="image/svg+xml" />
-			</a>
-		</div>
-	</fieldset>
+	'.$panelGraph.'
 </div>
 ';
 }
