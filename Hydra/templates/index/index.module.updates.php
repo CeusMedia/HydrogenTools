@@ -22,11 +22,13 @@ foreach( $modulesUpdate as $module ){
 ksort( $listModulesUpdatable );
 if( $listMessenger )
 	$view->env->getMessenger()->noteNotice( 'Aktualisierung verfügbar für: '.join( ", ", $listMessenger ) );
-return '
+$panel	= '
 <fieldset style="position: relative">
 	<legend class="info">Module aktualisierbar <span class="small">('.count( $listModulesUpdatable ).')</span></legend>
 	<div style="max-height: 160px; overflow: auto">
 		<ul>'.join( $listModulesUpdatable ).'</ul>
 	</div>
 </fieldset>';
+$env->clock->profiler->tick( 'Template: index/index - updates' );
+return $panel;
 ?>

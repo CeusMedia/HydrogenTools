@@ -211,6 +211,10 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 		return $this->remote;
 	}
 
+	public function setRemoteInstance( $instanceId ){
+		$this->initRemote( $instanceId );
+	}
+	
 	protected function initRemote( $forceInstanceId = NULL ){
 		$messenger		= $this->getMessenger();
 		$instance		= $this;

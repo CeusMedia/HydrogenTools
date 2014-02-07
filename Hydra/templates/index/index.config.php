@@ -35,14 +35,15 @@ foreach( $modulesInstalled as $module ){
 		$listModules[]	= $heading.$list;
 	}
 }
-if( empty( $listModules ) )
-	return "";
 
-return '
+
+$panel	= '
 <fieldset>
 	<legend class="info">Konfiguration</legend>
 	<div style="max-height: 320px; overflow: auto;">
 		'.join( $listModules ).'
 	</div>
 </fieldset>';
+$env->clock->profiler->tick( 'Template: index/index - config' );
+return empty( $listModules ) ? "" : $panel;
 ?>

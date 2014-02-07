@@ -6,14 +6,22 @@ foreach( $instances as $id => $entry ){
 
 	$configFile	= $entry->uri.$entry->configPath.$entry->configFile;
 	$class		= $instanceId === $id ? array( 'active' ) : array();
-	$class[]	= file_exists( $configFile ) ? 'check-okay' : 'check-fail';
+	$badge		= '<span class="badge badge-fail">!</span>';
+	if( file_exists( $configFile )  ){
+		if( $entry->modules['updatable'] ){
+			$count		= count( $entry->modules['updatable'] );
+			$badge		= '<span class="badge badge-update" title="'.$count.' Update(s)">'.$count.'</span>';
+		}
+		else
+			$badge		= '';
+	}
 	$url		= './admin/instance/select/'.$id;
 	$attributes	= array(
 		'href'				=> $url,
 		'class'				=> 'instance',
 		'data-instance-id'	=> $id,
 	);
-	$link		= UI_HTML_Tag::create( 'a', $entry->title, $attributes );
+	$link		= UI_HTML_Tag::create( 'a', $entry->title, $attributes ).$badge;
 	$attributes	= array(
 		'class'		=> join( ' ', $class ),
 		'data-url'	=> $entry->protocol.$entry->host.$entry->path
@@ -25,7 +33,31 @@ ksort( $list );
 
 $list	= UI_HTML_Tag::create( 'ul', $list, array( 'class' => 'instances' ) );
 
-return '
+$panel	= '
+<style>
+.badge{
+	display: inline-block;
+	float: right;
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	margin: 0;
+	background-color: #777;
+	border-radius: 9px;
+	line-height: 1.6em;
+	text-align: center;
+	font-size: 0.9em;
+	color: white;
+	}
+
+.badge.badge-fail{
+	background-color: #922;
+	}
+.badge.badge-update{
+	background-color: #05A;
+	}
+
+</style>
 <fieldset>
 	<legend>Instanzen</legend>
 	<div style="position: absolute; right: 8px; top: 16px;">
@@ -33,39 +65,7 @@ return '
 	</div>
 	'.$list.'
 </fieldset>
-<script>
-function checkForUpdates(){
-	$("ul.instances li.check-okay").each(function(){
-		var instanceId = $(this).children("a").data("instanceId");
-		Instance.isReachable($(this).data("url"), $(this), {
-			success: function(){
-				$.ajax({
-					url: "./index/ajaxListModuleUpdates/?forceInstanceId="+instanceId,
-					dataType: "json",
-					context: $(this),
-					success: function(json){
-						if(json.missing.length)
-							$(this).addClass("check-modules-missing");
-						else if(json.updatable.length)
-							$(this).addClass("check-modules-updatable");
-					},
-					error: function(xhr, status){
-		//				console.log(status);
-		//				console.log(xhr);
-					}
-				});
-			},
-			error: function(){
-				console.log("Error: "+instanceId);
-				$(this).removeClass("check-okay").addClass("check-fail");
-			}
-		});
-	});
-}
-$(document).ready(function(){
-	
-	checkForUpdates();
-});
-</script>
 ';
+$env->clock->profiler->tick( 'Template: index/index - instances' );
+return $panel;
 ?>

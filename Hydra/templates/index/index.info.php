@@ -13,7 +13,7 @@ $instanceBase		= $remoteConfig->get( 'app.base.url' ) ? $remoteConfig->get( 'app
 $linkInstanceUrl	= UI_HTML_Tag::create( 'a', $instanceUrl, array( 'href' => $instanceUrl ) );
 $linkInstanceBase	= $instanceBase	? UI_HTML_Tag::create( 'a', $instanceBase, array( 'href' => $instanceBase ) ) : "<em>autodetect</em>";
 
-return '
+$panel	= '
 <fieldset style="position: relative">
 	<legend class="info">Application Instance Information</legend>
 	<div style="position: absolute; right: 8px; top: 16px;">
@@ -82,4 +82,6 @@ div.page-preview-blocked div.page-preview-container div.page-preview-mask {
 	}
 </style>
 </fieldset>';
+$env->clock->profiler->tick( 'Template: index/index - info' );
+return $panel;
 ?>
