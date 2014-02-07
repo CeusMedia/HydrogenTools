@@ -9,7 +9,7 @@ foreach( $modulesInstalled as $moduleId => $module ){
 	$listModulesInstalled[$module->title]	= '<li>'.$link.'</li>';	
 }
 natcasesort( $listModulesInstalled );
-return '
+$panel	= '
 <fieldset style="position: relative">
 	<legend class="info">Module installiert <span class="small">('.count( $listModulesInstalled ).')</span></legend>
 	<div style="position: absolute; right: 8px; top: 16px;">
@@ -19,4 +19,6 @@ return '
 		<ul>'.join( $listModulesInstalled ).'</ul>
 	</div>
 </fieldset>';
+$env->clock->profiler->tick( 'Template: index/index - installed' );
+return $panel;
 ?>

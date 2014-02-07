@@ -39,7 +39,7 @@ $load1Relative	= 1 / ( 1 + $load1 / $cores );
 $indicator	= new UI_HTML_Indicator();
 $loadGraph	= $indicator->build( $load1Relative, 1 );
 
-return '
+$panel	= '
 <fieldset class="index-system">
 	<legend class="info">Server</legend>
 	<dl>
@@ -63,4 +63,6 @@ return '
 		</dd>
 	</dl>
 </fieldset>';
+$env->clock->profiler->tick( 'Template: index/index - system' );
+return $panel;
 ?>

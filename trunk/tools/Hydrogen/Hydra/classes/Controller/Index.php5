@@ -4,65 +4,55 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 	/**	@var	Tool_Hydrogen_Setup_Environment		$env		Environment object */
 	protected $env;
 
-	/**
-	 *	Hint: You need to set the instance ID by request parameter "forceInstanceId".
-	 */
-	public function ajaxListModuleUpdates(){
-		$model		= new Model_Instance( $this->env );
-		$instance	= $model->get( $this->env->getRequest()->get( 'forceInstanceId' ) );
-
-		$pathApp		= $instance->uri;
-		$pathConfig		= !empty( $instance->configPath ) ? $instance->configPath : "config/";
-		$fileConfig		= !empty( $instance->configFile ) ? $instance->configFile : "config.ini";
-
-//		if( !preg_match( '/^\//', $pathApp ) )
-//			$pathApp	= getEnv( 'DOCUMENT_ROOT' ).'/'.$pathApp;
-
-		$options	= array(
-			'configFile'	=> $pathApp.$pathConfig.$fileConfig,
-			'pathApp'		=> $pathApp
-		);
-
-		$env	= $this->env->getRemote();
-		$logic		= Logic_Module::getInstance( $this->env );
-		$modulesAll	= $logic->model->getAll();
-		$modules	= $env->getModules()->getAll();
-
-		$list['missing']	= array();
-		$list['updatable']	= array();
-		$list['supported']	= array();
-
-		foreach( $modules as $module ){
-			foreach( $module->relations->needs as $need )
-				if( !array_key_exists( $need, $modules ) )
-					$list['missing'][]	= $need;
-			foreach( $module->relations->supports as $support )
-				if( !array_key_exists( $support, $modules ) )
-					$list['supported'][]	= $support;
-			$version	= 0;
-			if( isset( $modulesAll[$module->id] ) ){
-				$version	= $modulesAll[$module->id]->versionAvailable;
-				if( $module->versionInstalled && $version ){
-					$modulesAll[$module->id];
-					if( version_compare( $version, $module->versionInstalled ) > 0 )
-						$list['updatable'][]	= $module->id;
+	public function listInstanceModules( $instanceId ){
+		$cache	= $this->env->getCache();
+		$list	= $cache->get( 'instance.'.$instanceId );
+		if( !$list ){
+			$this->env->setRemoteInstance( $instanceId );
+			$env		= $this->env->getRemote();
+			$list['missing']	= array();
+			$list['updatable']	= array();
+			$list['supported']	= array();
+			if( $env->getModules() instanceof CMF_Hydrogen_Environment_Resource_Module_Library_Local ){
+				$logic		= Logic_Module::getInstance( $this->env );
+				$modulesAll	= $logic->model->getAll();
+				$modules	= $env->getModules()->getAll();
+				foreach( $modules as $module ){
+					foreach( $module->relations->needs as $need )
+						if( !array_key_exists( $need, $modules ) )
+							$list['missing'][]	= $need;
+					foreach( $module->relations->supports as $support )
+						if( !array_key_exists( $support, $modules ) )
+							$list['supported'][]	= $support;
+					$version	= 0;
+					if( isset( $modulesAll[$module->id] ) ){
+						$version	= $modulesAll[$module->id]->versionAvailable;
+						if( $module->versionInstalled && $version ){
+							$modulesAll[$module->id];
+							if( version_compare( $version, $module->versionInstalled ) > 0 )
+								$list['updatable'][]	= $module->id;
+						}
+					}
 				}
 			}
+			$cache->set( 'instance.'.$instanceId, $list );
 		}
-		print json_encode( $list );
-		exit;
+		return $list;
 	}
-
+	
 	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){		
 		if( $this->env->getRequest()->has( 'resetInstanceId' ) ){
 			$env->getSession()->remove( 'instanceId' );
 			$this->restart( NULL );
 		}
 
+		$model		= new Model_Instance( $this->env );
+		$instances	= $model->getAll();
+		foreach( $instances as $instanceId => $instance )
+			$instance->modules	= $this->listInstanceModules( $instanceId );
 		$instanceId		= $this->env->getSession()->get( 'instanceId' );
 
-		$model		= new Model_Instance( $this->env );
-		$this->addData( 'instances', $model->getAll() );
+		$this->addData( 'instances', $instances );
 		$this->addData( 'instanceId', $instanceId );
 
 		if( $instanceId ){
