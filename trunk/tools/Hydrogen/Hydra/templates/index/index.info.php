@@ -7,6 +7,8 @@ if( strlen( $remoteConfig->get( 'app.version' ) ) )
 if( strlen( $remoteConfig->get( 'app.revision' ) ) )
 	$name	.= ' <span class="small">rev'.$remoteConfig->get( 'app.version' ).'</span>';
 
+$instance->host		= $instance->host === "localhost" ? $env->host : $instance->host;
+
 $instanceUrl		= $instance->protocol.$instance->host.$instance->path;
 $instanceBase		= $remoteConfig->get( 'app.base.url' ) ? $remoteConfig->get( 'app.base.url' ) : "";
 
@@ -20,10 +22,14 @@ $panel	= '
 		'.UI_HTML_Elements::LinkButton( './admin/instance/edit/'.$instanceId, '', 'button tiny edit' ).'
 	</div>
 	<dl>
-		<dt>Application Name</dt><dd>'.$name.'</cite></dd>
-		<dt>Application Instance URL <small class="muted"><em>(defined by Hydra Instance)</em></small></dt><dd>'.$linkInstanceUrl.'</dd>
-		<dt>Application Base URL <small class="muted"><em>(defined by application configuration)</em></small></dt><dd>'.$linkInstanceBase.'</dd>
-		<dt>Path to Application Instance</dt><dd><a href="file://'.$remote->path.'" target="_blank">'.$remote->path.'</a></dd>
+		<dt>Application Name</dt>
+		<dd>'.$name.'</cite></dd>
+		<dt>Application Instance URL <small class="muted"><em>(defined by Hydra Instance)</em></small></dt>
+		<dd>'.$linkInstanceUrl.'</dd>
+		<dt>Application Base URL <small class="muted"><em>(defined by application configuration)</em></small></dt>
+		<dd>'.$linkInstanceBase.'</dd>
+		<dt>Path to Application Instance</dt>
+		<dd><a href="file://'.$remote->path.'" target="_blank">'.$remote->path.'</a></dd>
 	</dl>
 	<br/>
 	<div class="page-preview not-page-preview-blocked" data-url="'.$instanceUrl.'">

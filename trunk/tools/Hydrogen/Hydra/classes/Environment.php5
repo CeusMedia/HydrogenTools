@@ -259,7 +259,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			}
 			catch( Exception $e )
 			{
-				die( $e->getMessage() );
+			//	die( $e->getMessage() );
 				$this->getMessenger()->noteError( $e->getMessage() );
 				$this->remote		= new CMF_Hydrogen_Environment_Dummy( $options );
 			}
