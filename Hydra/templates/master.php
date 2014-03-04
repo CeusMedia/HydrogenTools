@@ -115,6 +115,8 @@ $env->clock->profiler->tick( 'interface: master' );
 $pathJsLib		= $config->get( 'path.scripts.lib' );
 $pathCssLib		= $config->get( 'path.styles.lib' );
 
+$page->addFavouriteIcon( 'http://cdn.int1a.net/img/famfamfam/silk/brick.png' );
+
 $page->css->primer->addUrl( $pathCssLib.'xmp.formats.css' );
 $page->css->primer->addUrl( $pathCssLib.'layout.column.css' );
 $page->addPrimerStyle( 'layout.messenger.css' );
