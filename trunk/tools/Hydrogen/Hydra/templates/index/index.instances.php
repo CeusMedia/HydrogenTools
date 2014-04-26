@@ -1,5 +1,6 @@
 <?php
 $list		= array();
+$nrUpdates	= 0;
 foreach( $instances as $id => $entry ){
 	$entry->configPath	= !empty( $entry->configPath ) ? $entry->configPath : 'config/';
 	$entry->configFile	= !empty( $entry->configFile ) ? $entry->configFile : 'config.ini';
@@ -10,6 +11,7 @@ foreach( $instances as $id => $entry ){
 	if( file_exists( $configFile )  ){
 		if( $entry->modules['updatable'] ){
 			$count		= count( $entry->modules['updatable'] );
+			$nrUpdates	+= $count;
 			$badge		= '<span class="badge badge-update" title="'.$count.' Update(s)">'.$count.'</span>';
 		}
 		else
@@ -33,20 +35,23 @@ ksort( $list );
 
 $list	= UI_HTML_Tag::create( 'ul', $list, array( 'class' => 'instances' ) );
 
+$badgeNrUpdates	= $nrUpdates ? UI_HTML_Tag::create( 'span', $nrUpdates, array( 'class' => 'badge badge-update' ) ) : '';
 $panel	= '
 <style>
 .badge{
 	display: inline-block;
 	float: right;
-	width: 18px;
+	min-width: 6px;
 	height: 18px;
-	padding: 0;
+	padding: 0 6px;
 	margin: 0;
+	margin-left: 0.5em;
 	background-color: #777;
 	border-radius: 9px;
 	line-height: 1.6em;
 	text-align: center;
 	font-size: 0.9em;
+	font-size: 11.5px;
 	color: white;
 	}
 
@@ -59,7 +64,7 @@ $panel	= '
 
 </style>
 <fieldset>
-	<legend>Instanzen</legend>
+	<legend>Instanzen&nbsp;'.$badgeNrUpdates.'</legend>
 	<div style="position: absolute; right: 8px; top: 16px;">
 		'.UI_HTML_Elements::LinkButton( './admin/instance/', '', 'button tiny edit' ).'
 	</div>
