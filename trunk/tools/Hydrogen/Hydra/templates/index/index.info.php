@@ -7,7 +7,12 @@ if( strlen( $remoteConfig->get( 'app.version' ) ) )
 if( strlen( $remoteConfig->get( 'app.revision' ) ) )
 	$name	.= ' <span class="small">rev'.$remoteConfig->get( 'app.version' ).'</span>';
 
-$instance->host		= $instance->host === "localhost" ? $env->host : $instance->host;
+if( $instance->host === "localhost" ){
+	$instance->host     = $env->host;
+	if( $env->port && $env->port != 80 )
+		$instance->host	.= ":".$env->port;
+}
+//$instance->host		= $instance->host === "localhost" ? $env->host : $instance->host;
 
 $instanceUrl		= $instance->protocol.$instance->host.$instance->path;
 $instanceBase		= $remoteConfig->get( 'app.base.url' ) ? $remoteConfig->get( 'app.base.url' ) : "";
