@@ -214,7 +214,7 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 	public function setRemoteInstance( $instanceId ){
 		$this->initRemote( $instanceId );
 	}
-	
+
 	protected function initRemote( $forceInstanceId = NULL ){
 		$messenger		= $this->getMessenger();
 		$instance		= $this;
@@ -259,8 +259,13 @@ class Tool_Hydrogen_Setup_Environment extends CMF_Hydrogen_Environment_Web{
 			}
 			catch( Exception $e )
 			{
-			//	die( $e->getMessage() );
-				$this->getMessenger()->noteError( $e->getMessage() );
+				switch( $e->getCode() ){
+					case 503:
+						$this->getMessenger()->noteError( 'Access to application denied: Server load to high' );
+						break;
+					default:
+						$this->getMessenger()->noteError( $e->getMessage() );
+				}
 				$this->remote		= new CMF_Hydrogen_Environment_Dummy( $options );
 			}
 			$this->pathApp		= $pathApp;

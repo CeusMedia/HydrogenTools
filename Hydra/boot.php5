@@ -10,7 +10,8 @@ function _cmRealize( $constant, $variable, $default ){
 	return $var;
 }
 /*  --  LOAD LIBRARIES  --  */
-_cmRealize( 'CML_PATH', 'pathLibraries', '/var/www/lib/' );
+$pathLibraries	= isset( $pathLibraries ) ? $pathLibraries : '/var/www/lib/';
+_cmRealize( 'CML_PATH', 'pathLibraries', $pathLibraries );
 require_once CML_PATH.'cmClasses/'._cmRealize( 'CMC_VERSION', 'versionCMC', 'trunk' ).'/autoload.php5';
 require_once CML_PATH.'cmFrameworks/'._cmRealize( 'CMF_VERSION', 'versionCMF', 'trunk' ).'/autoload.php5';
 require_once CML_PATH.'cmModules/'._cmRealize( 'CMM_VERSION', 'versionCMM', 'trunk' ).'/autoload.php5';
