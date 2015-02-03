@@ -39,10 +39,10 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 		}
 		return $list;
 	}
-	
-	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){		
+
+	public function index( $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL, $arg5 = NULL ){
 		if( $this->env->getRequest()->has( 'resetInstanceId' ) ){
-			$env->getSession()->remove( 'instanceId' );
+			$this->env->getSession()->remove( 'instanceId' );
 			$this->restart( NULL );
 		}
 
@@ -105,7 +105,7 @@ class Controller_Index extends CMF_Hydrogen_Controller{
 			$this->addData( 'modulesPossible', $listModulesPossible );
 			$this->addData( 'modulesUpdate', $listModulesUpdate );
 		}
-		
+
 		$this->env->clock->profiler->tick( 'Index::index: done' );
 	}
 
