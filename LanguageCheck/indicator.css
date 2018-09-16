@@ -1,0 +1,39 @@
+div.indicator {
+	position: relative;
+	background: #EFEFEF;
+	padding: 6px 8px 6px 8px;
+	background: #EFEFEF;
+	border: 1px solid #BFBFBF;
+	display: block;
+	width: 240px;
+	border-style: solid;
+	border-color: rgb(220, 223, 228) rgb(133, 135, 140) rgb(133, 135, 140) rgb(220, 223, 228);
+	border-width: 2px;
+	background-color: rgb(235, 233, 237);
+	-moz-user-focus: normal;
+	-moz-border-top-colors: rgb(220, 223, 228) white;
+	-moz-border-right-colors: rgb(133, 135, 140) rgb(167, 166, 170);
+	-moz-border-bottom-colors: rgb(133, 135, 140) rgb(167, 166, 170);
+	-moz-border-left-colors: rgb(220, 223, 228) white;
+	}
+div.indicator-outer {
+	width: 200px;
+	border: 1px solid black;
+	background-color: rgb(255, 255, 255);
+	border-color: rgb(133, 135, 140) rgb(220, 223, 228) rgb(220, 223, 228) rgb(133, 135, 140);
+	-moz-user-focus: normal;
+	-moz-border-bottom-colors: rgb(220, 223, 228) white;
+	-moz-border-left-colors: rgb(133, 135, 140) rgb(167, 166, 170);
+	-moz-border-top-colors: rgb(133, 135, 140) rgb(167, 166, 170);
+	-moz-border-right-colors: rgb(220, 223, 228) white;
+	}	
+div.indicator-inner {
+	height: 10px;
+	}	
+div.indicator-percentage {
+	font-family: tahoma;
+	font-size: 11px;
+	position: absolute;
+	top: 4px;
+	right: 8px;	
+	}
